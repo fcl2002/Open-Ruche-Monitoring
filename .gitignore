@@ -1,1 +1,9 @@
 BACKLOG.md
+
+# KiCad lock and temporary files
+*.kicad_sch.lck
+*.kicad_pcb
+*.kicad_pro
+*.kicad_sch
+esp32/Schematics/load-cell-amplifier/#auto_saved_files#
+/esp32
