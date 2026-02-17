@@ -1,1 +1,29 @@
 BACKLOG.md
+
+# Hardware
+# -----------------------------------------------
+# Automatically generated backup files from KiCad
+# -----------------------------------------------
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.sch-bak
+*-save.pro
+*-save.kicad_pcb
+/*-backups/
+
+# -----------------------------------------------
+# Temp and cache files
+# -----------------------------------------------
+*.000
+*.tmp
+*.log
+*.raw
+*~
+~*
+_autosave-*
+\#auto_saved_files\#
+fp-info-cache
+*.kicad_prl
+/build
