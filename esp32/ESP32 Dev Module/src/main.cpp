@@ -24,26 +24,30 @@ void setup() {
 	Serial.println("Type 'start' to begin weighing every 5 seconds, 'stop' to stop.");
 }
 
+void read_HX711() {
+	previousMillis = millis();
+		
+	hx711.power_up();
+	float units = hx711.get_units(10);
+	Serial.print("Weight: ");
+	Serial.print(units, 2);
+	Serial.println(" kg");
+	hx711.power_down();
+}
+
 void loop() {
 	if (Serial.available()) {
-		String comando = Serial.readStringUntil('\n');
-        comando.trim();
-        if (comando == "start") {
+		String command = Serial.readStringUntil('\n');
+        command.trim();
+        if (command == "start") {
             start = true;
         }
-        if (comando == "stop") {
+        if (command == "stop") {
             start = false;
         }
     }
 
 	if (start && (millis() - previousMillis >= interval)) {
-		previousMillis = millis();
-		
-		hx711.power_up();
-		float units = hx711.get_units(10);
-		Serial.print("Weight: ");
-		Serial.print(units, 2);
-		Serial.println(" kg");
-		hx711.power_down();
+		read_HX711();
 	}
 }
