@@ -6,4 +6,8 @@ BACKLOG.md
 *.kicad_pro
 *.kicad_sch
 esp32/Schematics/load-cell-amplifier/#auto_saved_files#
-/esp32
+
+esp32/Schematics/load-cell-amplifier/load-cell-amplifier.kicad_prl
+esp32/Schematics/load-cell-amplifier/load-cell-amplifier-backups/load-cell-amplifier-2026-02-10_123804.zip
+esp32/Schematics/load-cell-amplifier/load-cell-amplifier-backups/load-cell-amplifier-2026-02-17_100507.zip
+esp32/Schematics/load-cell-amplifier/fp-info-cache
