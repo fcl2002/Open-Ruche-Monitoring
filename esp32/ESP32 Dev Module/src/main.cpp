@@ -57,10 +57,19 @@ void setup() {
     logInfo("Initializing I2C for SEN0562...", "SETUP");
     Wire.begin(); // using default SDA/SCL
     
+    // MMA8451 Accelerometer
+    logInfo("Initializing MMA8451 accelerometer...", "SETUP");
+    if (!mma.begin(MMA8451_ADDR)) {
+        logError(ERR_DEVICE_NOT_FOUND, "MMA8451");
+    } else {
+        mma.setRange(MMA8451_RANGE_2_G);  // Set range to 2G for better precision
+        logInfo("MMA8451 initialized successfully", "SETUP");
+    }
+    
     logInfo("Setup complete. System ready.", "SYSTEM");
 }
 
-uint8_t payload[12];
+uint8_t payload[18];  // 1 + 2 + 1 + 2 + 2 + 2 + 2 + 2 + 2 + 2 = 18 bytes
 
 void loop() {
     if (!setupDelayDone) {
@@ -98,9 +107,17 @@ void loop() {
         int16_t lux_read = read_sen0562();
         memcpy(&payload[idx], &lux_read, sizeof(int16_t)); 
         idx += 2;
+        
+        AccelResult accel_data = read_mma8451();
+        memcpy(&payload[idx], &accel_data.x, sizeof(int16_t)); 
+        idx += 2;
+        memcpy(&payload[idx], &accel_data.y, sizeof(int16_t)); 
+        idx += 2;
+        memcpy(&payload[idx], &accel_data.z, sizeof(int16_t)); 
+        idx += 2;
 
         logDebug("Payload ready for transmission", "LOOP");
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 18; i++) {
             Serial.print(payload[i]); // ou DEC
             Serial.print(" ");
         }

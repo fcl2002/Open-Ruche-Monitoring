@@ -12,6 +12,8 @@ DallasTemperature sondes(&oneWire);
 DeviceAddress sonde1 = {0x28, 0x4C, 0xB5, 0x68, 0x10, 0x00, 0x00, 0x4D}; //fil orange
 DeviceAddress sonde2 = {0x28, 0x33, 0xBA, 0x69, 0x10, 0x00, 0x00, 0x11};
 
+Adafruit_MMA8451 mma = Adafruit_MMA8451();
+
 /* HX711 */
 int16_t read_hx711() {
 	hx711.power_up();
@@ -67,7 +69,8 @@ uint16_t read_sen0562() {
         return SENSOR_LUX_ERROR_VALUE;
     }
     delay(20);
-    Wire.requestFrom(SEN0562_ADDR, (uint8_t)2);
+    size_t bytesToRequest = 2;
+    Wire.requestFrom(SEN0562_ADDR, bytesToRequest);
     if (Wire.available() < 2) {
         logError(ERR_INVALID_DATA, "SEN0562");
         return SENSOR_LUX_ERROR_VALUE;
@@ -78,4 +81,22 @@ uint16_t read_sen0562() {
     uint16_t data = (buf[0] << 8) | buf[1];
     float lux = ((float)data) / 1.2;
     return (uint16_t)lux;
+}
+
+/* MMA8451 Accelerometer */
+AccelResult read_mma8451() {
+    AccelResult result;
+    
+    mma.read();
+    
+    // Get sensor event with acceleration data
+    sensors_event_t event;
+    mma.getEvent(&event);
+    
+    // Convert m/s^2 to int16_t (multiply by 10 for one decimal precision)
+    result.x = (int16_t)(event.acceleration.x * 10);
+    result.y = (int16_t)(event.acceleration.y * 10);
+    result.z = (int16_t)(event.acceleration.z * 10);
+    
+    return result;
 }
