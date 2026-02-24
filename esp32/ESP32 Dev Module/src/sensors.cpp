@@ -20,48 +20,40 @@ int16_t read_hx711() {
 	Serial.print(units, 2);
 	Serial.println(" kg");
 	hx711.power_down();
-
 	return (int16_t)(units*10);
 }
 
 /* DHT22 */
 DHT22Result read_dht22(DHT& dht, const char* sensorName){
-	// Serial.println(sensorName);
-    // Serial.print("Humidity: ");
-    // Serial.print((int8_t)(dht.readHumidity()));
-    // Serial.print(" %\t");
-    // Serial.print("Temperature: ");
-    // Serial.print((int16_t)(dht.readTemperature()*10));
-    // Serial.println(" *C");
-
 	DHT22Result result;
 	result.humidity = (int8_t)(dht.readHumidity());
 	result.temperature = (int16_t)(dht.readTemperature()*10);
 	return result;
 }
 
-/* Sondes DS18B20 */
-void printAddress(DeviceAddress deviceAddress) {
-    for (uint8_t i = 0; i < 8; i++) {
-        if (deviceAddress[i] < 16) Serial.print("0");
-        Serial.print(deviceAddress[i], HEX);
-    }
-}
-
+/* DS18B20 */
 int16_t read_ds18b20_sonde(DeviceAddress sensorAddr) {
     sondes.requestTemperatures();
     if (sondes.isConnected(sensorAddr)) {
-        // uint16_t temp = (int16_t)(sensors.getTempC(sensorAddr)*10);
-        // Serial.print("Sensor [");
-        // printAddress(sensorAddr);
-        // Serial.print("]: ");
-        // Serial.print(temp);
-        // Serial.println(" °C");
         return (int16_t)(sondes.getTempC(sensorAddr)*10);
     } else {
-        Serial.print("Sensor [");
-        printAddress(sensorAddr);
-        Serial.println("] not connected!");
+        Serial.print("Sensor not connected!");
         return -32768;
     }
+}
+
+/* SEN0592 */
+uint16_t read_sen0562() {
+    uint8_t buf[2] = {0};
+    Wire.beginTransmission(SEN0562_ADDR);
+    Wire.write(0x10);
+    if (Wire.endTransmission() != 0) return 0;
+    delay(20);
+    Wire.requestFrom(SEN0562_ADDR, (uint8_t)2);
+    for (uint8_t i = 0; i < 2; i++) {
+        buf[i] = Wire.read();
+    }
+    uint16_t data = (buf[0] << 8) | buf[1];
+    float lux = ((float)data) / 1.2;
+    return (uint16_t)lux;
 }

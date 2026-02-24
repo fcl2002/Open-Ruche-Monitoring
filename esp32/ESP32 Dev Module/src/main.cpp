@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include "sensors.h"
 
-// #include <Wire.h>
-// #define SEN0562_ADDR 0x23 // LUX I2C address
 // #define SEN0562_ADDR 0x1C // ACC I2C address
 
 bool setupDelayDone = false;
@@ -32,8 +30,11 @@ void setup() {
     if (sondes.getDeviceCount() > 1)
         sondes.getAddress(sonde2, 1);
 
-    //Wire.begin(); // Use default SDA/SCL
+    // SEN0562
+    Wire.begin(); // using default SDA/SCL
 }
+
+uint8_t payload[12];
 
 void loop() {
     if (!setupDelayDone) {
@@ -42,38 +43,40 @@ void loop() {
         return;
     }
 
+    
     // Read DHT22 every 10 minutes
     if (millis() - lastRead >= TIME_TO_READ) {
+        int idx = 0;
+
         // read_hx711(); // il faut vérifier encore
-        read_dht22(external_dht, "External DHT22");
-        read_dht22(internal_dht, "Internal DHT22");
-        read_ds18b20_sonde(sonde1);
-        read_ds18b20_sonde(sonde2);
+
+        DHT22Result ext_dht22 = read_dht22(external_dht, "External DHT22");
+        payload[idx++] = ext_dht22.humidity;
+        memcpy(&payload[idx], &ext_dht22.temperature, sizeof(int16_t)); 
+        idx += 2;
+        
+        DHT22Result int_dht22 = read_dht22(internal_dht, "Internal DHT22");
+        payload[idx++] = int_dht22.humidity;
+        memcpy(&payload[idx], &int_dht22.temperature, sizeof(int16_t)); 
+        idx += 2;
+        
+        int16_t sonde1_read = read_ds18b20_sonde(sonde1);
+        memcpy(&payload[idx], &sonde1_read, sizeof(int16_t)); 
+        idx += 2;
+
+        int16_t sonde2_read = read_ds18b20_sonde(sonde2);
+        memcpy(&payload[idx], &sonde2_read, sizeof(int16_t)); 
+        idx += 2;
+        
+        int16_t lux_read = read_sen0562();
+        memcpy(&payload[idx], &lux_read, sizeof(int16_t)); 
+        idx += 2;
+
+        for (int i = 0; i < 12; i++) {
+            Serial.print(payload[i], HEX); // ou DEC
+            Serial.print(" ");
+        }
         Serial.println();
         lastRead = millis();
     }
 }
-
-
-// uint8_t readReg(uint8_t reg, uint8_t* pBuf, size_t size) {
-//     Wire.beginTransmission(SEN0562_ADDR);
-//     Wire.write(reg);
-//     if (Wire.endTransmission() != 0) return 0;
-//     delay(20);
-//     Wire.requestFrom(SEN0562_ADDR, (uint8_t)size);
-//     for (uint16_t i = 0; i < size; i++) {
-//         pBuf[i] = Wire.read();
-//     }
-//     return size;
-// }
-
-// void loop() {
-//     uint8_t buf[2] = {0};
-//     readReg(0x10, buf, 2); // Register 0x10
-//     uint16_t data = buf[0] << 8 | buf[1];
-//     float lux = ((float)data) / 1.2;
-//     Serial.print("LUX: ");
-//     Serial.print(lux);
-//     Serial.println(" lx");
-//     delay(500);
-// }
