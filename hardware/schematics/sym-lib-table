@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "uPesy Boards")(type "KiCad")(uri "${UPESY_BOARDS}/uPesy.kicad_sym")(options "")(descr ""))
   (lib (name "Grove")(type "KiCad")(uri "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_grove_conn/110990030.kicad_sym")(options "")(descr ""))
+  (lib (name "Pololu")(type "KiCad")(uri "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_pololu_regulator/STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3.kicad_sym")(options "")(descr ""))
 )

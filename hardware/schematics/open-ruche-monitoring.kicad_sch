@@ -9,6 +9,415 @@
 		(date "2026-02-17")
 	)
 	(lib_symbols
+		(symbol "Connector:Conn_01x08_Pin"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x08_Pin"
+				(at 0 -12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x08, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x08_Pin_1_1"
+				(rectangle
+					(start 0.8636 7.747)
+					(end 0 7.493)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 5.207)
+					(end 0 4.953)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -7.493)
+					(end 0 -7.747)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -10.033)
+					(end 0 -10.287)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 7.62) (xy 0.8636 7.62)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 5.08) (xy 0.8636 5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 2.54) (xy 0.8636 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 0.8636 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -2.54) (xy 0.8636 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -5.08) (xy 0.8636 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -7.62) (xy 0.8636 -7.62)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -10.16) (xy 0.8636 -10.16)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 5.08 7.62 180)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 5.08 180)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -5.08 180)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -7.62 180)
+					(length 3.81)
+					(name "Pin_7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -10.16 180)
+					(length 3.81)
+					(name "Pin_8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:Buzzer"
 			(pin_names
 				(offset 0.0254)
@@ -547,6 +956,286 @@
 						)
 					)
 					(number "4"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Pololu:STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -10.16 8.255 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" "STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3"
+				(at -10.16 -10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Footprint" "Pololu:MODULE_STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "MF" "Pololu"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MAXIMUM_PACKAGE_HEIGHT" "2.54mm"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "CREATOR" "NEZY"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Price" "None"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Package" "None"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Check_prices" "https://www.snapeda.com/parts/STEP-DOWN%20VOLTAGE%20REGULATOR%20D24V6F3/Pololu/view-part/?ref=eda"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "STANDARD" "Manufacturer Recommendations"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "PARTREV" "NA"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "VERIFIER" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "SnapEDA_Link" "https://www.snapeda.com/parts/STEP-DOWN%20VOLTAGE%20REGULATOR%20D24V6F3/Pololu/view-part/?ref=snap"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MP" "STEP-DOWN VOLTAGE REGULATOR D24V6F3"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Description_1" "Converter: step down; Uin: 3.8÷42V; Uout: 3.3V; 600mA; 80÷90%"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Availability" "Not in stock"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MANUFACTURER" "Pololu"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(symbol "STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3_0_0"
+				(rectangle
+					(start -10.16 7.62)
+					(end 10.16 -7.62)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -15.24 5.08 0)
+					(length 5.08)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "VIN"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 0 0)
+					(length 5.08)
+					(name "~{SHDN}"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "!SHDN"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 15.24 5.08 180)
+					(length 5.08)
+					(name "VOUT"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "VOUT"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 15.24 -5.08 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "GND"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -1313,6 +2002,60 @@
 			(embedded_fonts no)
 		)
 	)
+	(rectangle
+		(start 104.14 64.77)
+		(end 199.39 135.89)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 876aa553-7c29-4d95-adce-770bd46a73aa)
+	)
+	(rectangle
+		(start 231.14 24.13)
+		(end 283.21 73.66)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid a312dd90-561b-4b64-8f90-e683d0ab97ef)
+	)
+	(text "SENSORS"
+		(exclude_from_sim no)
+		(at 106.426 146.05 0)
+		(effects
+			(font
+				(size 5.08 5.08)
+			)
+		)
+		(uuid "309ec19c-8050-4059-9cbe-5abfa775b5e0")
+	)
+	(text "IA BOARDS"
+		(exclude_from_sim no)
+		(at 257.81 79.756 0)
+		(effects
+			(font
+				(size 5.08 5.08)
+			)
+		)
+		(uuid "803704a0-84d2-46a3-909a-641f756e445d")
+	)
+	(text "MAIN BOARD\n"
+		(exclude_from_sim no)
+		(at 152.4 60.452 0)
+		(effects
+			(font
+				(size 5.08 5.08)
+			)
+		)
+		(uuid "e977ab9a-2b52-4769-b438-de0bce2f2567")
+	)
 	(junction
 		(at 176.53 106.68)
 		(diameter 0)
@@ -1320,20 +2063,36 @@
 		(uuid "ae8a5cf0-9adc-44ef-8b36-98ba7f0078bc")
 	)
 	(no_connect
-		(at 43.18 190.5)
+		(at 45.72 190.5)
 		(uuid "11e19478-3d9d-422e-8191-4b4b7702c485")
 	)
 	(no_connect
-		(at 43.18 142.24)
+		(at 154.94 119.38)
+		(uuid "249ade3c-3075-41ac-84c4-6e7686f52c20")
+	)
+	(no_connect
+		(at 45.72 142.24)
 		(uuid "338340f3-6072-4283-b6d7-3b18d0bbb070")
 	)
 	(no_connect
-		(at 43.18 124.46)
+		(at 45.72 124.46)
 		(uuid "7a78e559-8b5e-4080-9205-0f167b346707")
 	)
 	(no_connect
-		(at 43.18 170.18)
+		(at 125.73 119.38)
+		(uuid "b354befb-531c-468a-b4de-7c7ab31ef188")
+	)
+	(no_connect
+		(at 35.56 101.6)
+		(uuid "bf589acf-6867-4217-98be-40b75ab0918d")
+	)
+	(no_connect
+		(at 45.72 170.18)
 		(uuid "e9f79dcf-b373-45c1-a4e4-55456d863ed7")
+	)
+	(no_connect
+		(at 35.56 99.06)
+		(uuid "f80fc953-a412-42ef-8295-d3b58ecf283a")
 	)
 	(wire
 		(pts
@@ -1357,16 +2116,6 @@
 	)
 	(wire
 		(pts
-			(xy 154.94 109.22) (xy 157.48 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "104e6c4c-159e-4c9c-b973-d0d17d40a53c")
-	)
-	(wire
-		(pts
 			(xy 77.47 185.42) (xy 80.01 185.42)
 		)
 		(stroke
@@ -1374,6 +2123,16 @@
 			(type default)
 		)
 		(uuid "127babf6-0972-401a-9b64-04c9438207fc")
+	)
+	(wire
+		(pts
+			(xy 35.56 104.14) (xy 48.26 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15f2ef7b-600e-49c3-bb57-f40d167b9a57")
 	)
 	(wire
 		(pts
@@ -1387,6 +2146,16 @@
 	)
 	(wire
 		(pts
+			(xy 38.1 87.63) (xy 38.1 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18f26c51-759a-41a9-9c4a-74df273ecd4b")
+	)
+	(wire
+		(pts
 			(xy 154.94 83.82) (xy 157.48 83.82)
 		)
 		(stroke
@@ -1397,7 +2166,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 182.88) (xy 46.99 182.88)
+			(xy 45.72 182.88) (xy 48.26 182.88)
 		)
 		(stroke
 			(width 0)
@@ -1407,7 +2176,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 137.16) (xy 45.72 137.16)
+			(xy 45.72 137.16) (xy 48.26 137.16)
 		)
 		(stroke
 			(width 0)
@@ -1435,6 +2204,16 @@
 		)
 		(uuid "2afc68f6-44b8-4b12-88a5-ed53e4326281")
 	)
+	(polyline
+		(pts
+			(xy 12.7 195.58) (xy 176.53 195.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2bbf1a3a-e472-474c-aee0-6638e5ea125e")
+	)
 	(wire
 		(pts
 			(xy 123.19 96.52) (xy 125.73 96.52)
@@ -1447,7 +2226,17 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 162.56) (xy 46.99 162.56)
+			(xy 67.31 43.18) (xy 67.31 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ff3ffa2-2ed0-49ca-9171-e6660c79b408")
+	)
+	(wire
+		(pts
+			(xy 45.72 162.56) (xy 48.26 162.56)
 		)
 		(stroke
 			(width 0)
@@ -1457,7 +2246,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 127) (xy 45.72 127)
+			(xy 45.72 127) (xy 48.26 127)
 		)
 		(stroke
 			(width 0)
@@ -1477,13 +2266,33 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 118.11) (xy 45.72 119.38)
+			(xy 48.26 118.11) (xy 48.26 119.38)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "37c19e9f-292d-47da-b0d7-d6b248174303")
+	)
+	(wire
+		(pts
+			(xy 35.56 91.44) (xy 38.1 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3e574308-a6ae-4762-bfd9-978eaa1c7bf8")
+	)
+	(wire
+		(pts
+			(xy 248.92 53.34) (xy 248.92 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "45dad0e1-4a88-4668-8947-04a3894db7df")
 	)
 	(wire
 		(pts
@@ -1505,6 +2314,26 @@
 		)
 		(uuid "4caaeffb-53e2-463a-8907-3b545f19d0c3")
 	)
+	(polyline
+		(pts
+			(xy 12.7 74.93) (xy 68.58 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f33293d-3c56-4c8c-be38-88c752d989bc")
+	)
+	(wire
+		(pts
+			(xy 35.56 106.68) (xy 38.1 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "514d550b-b028-45d1-8b1a-0fb8cf5f4fb1")
+	)
 	(wire
 		(pts
 			(xy 154.94 106.68) (xy 176.53 106.68)
@@ -1517,13 +2346,53 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 121.92) (xy 45.72 121.92)
+			(xy 125.73 121.92) (xy 123.19 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56f3df82-2335-41a9-94b6-68fc9d3a7308")
+	)
+	(wire
+		(pts
+			(xy 154.94 121.92) (xy 157.48 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5844c17f-d3bb-4759-a009-7730729dc437")
+	)
+	(polyline
+		(pts
+			(xy 68.58 151.13) (xy 176.53 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a12509f-3c54-40ed-9f0f-e2878c442582")
+	)
+	(wire
+		(pts
+			(xy 45.72 121.92) (xy 48.26 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "5e73eb8e-29c9-4c16-9229-9d25a81380c6")
+	)
+	(wire
+		(pts
+			(xy 35.56 96.52) (xy 38.1 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "62dd13d0-3b8a-4fca-8be3-68b4846c591b")
 	)
 	(wire
 		(pts
@@ -1537,7 +2406,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 119.38) (xy 45.72 119.38)
+			(xy 45.72 119.38) (xy 48.26 119.38)
 		)
 		(stroke
 			(width 0)
@@ -1547,13 +2416,33 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 135.89) (xy 45.72 137.16)
+			(xy 48.26 135.89) (xy 48.26 137.16)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "72c35476-9e54-42ce-9772-f794a56f6c39")
+	)
+	(polyline
+		(pts
+			(xy 12.7 195.58) (xy 12.7 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "733af062-53df-475d-944e-d83ab7a90ad4")
+	)
+	(wire
+		(pts
+			(xy 123.19 121.92) (xy 123.19 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73ace0e1-0b05-4a69-9d74-7d7c22a8d739")
 	)
 	(wire
 		(pts
@@ -1577,6 +2466,26 @@
 	)
 	(wire
 		(pts
+			(xy 250.19 34.29) (xy 247.65 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "821b62b8-f483-41d4-8ec2-eb135c2f7ded")
+	)
+	(wire
+		(pts
+			(xy 35.56 88.9) (xy 38.1 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "84f63732-c722-48f0-8a16-f89412157315")
+	)
+	(wire
+		(pts
 			(xy 147.32 162.56) (xy 144.78 162.56)
 		)
 		(stroke
@@ -1597,7 +2506,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 185.42) (xy 46.99 185.42)
+			(xy 45.72 185.42) (xy 49.53 185.42)
 		)
 		(stroke
 			(width 0)
@@ -1607,7 +2516,7 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 162.56) (xy 46.99 161.29)
+			(xy 48.26 162.56) (xy 48.26 161.29)
 		)
 		(stroke
 			(width 0)
@@ -1617,7 +2526,7 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 182.88) (xy 46.99 181.61)
+			(xy 48.26 182.88) (xy 48.26 181.61)
 		)
 		(stroke
 			(width 0)
@@ -1625,9 +2534,19 @@
 		)
 		(uuid "a33832c3-df7c-45bf-b0ff-8108172a5fd8")
 	)
+	(polyline
+		(pts
+			(xy 68.58 74.93) (xy 68.58 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a80bd542-7f54-49da-8579-11cb51e5c985")
+	)
 	(wire
 		(pts
-			(xy 43.18 167.64) (xy 46.99 167.64)
+			(xy 45.72 167.64) (xy 49.53 167.64)
 		)
 		(stroke
 			(width 0)
@@ -1645,6 +2564,26 @@
 		)
 		(uuid "ada16ded-8a37-4d60-81f5-6ab8dd79cad3")
 	)
+	(polyline
+		(pts
+			(xy 176.53 151.13) (xy 176.53 166.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "af552ab9-8987-45ff-8b68-f3f2e4abe798")
+	)
+	(wire
+		(pts
+			(xy 64.77 41.91) (xy 67.31 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "afff6f21-256f-4db2-a9c8-ee597c9d4a3c")
+	)
 	(wire
 		(pts
 			(xy 147.32 182.88) (xy 144.78 182.88)
@@ -1654,6 +2593,16 @@
 			(type default)
 		)
 		(uuid "b011ab73-d5e7-4dbe-bfd3-d84a0fffe46c")
+	)
+	(wire
+		(pts
+			(xy 123.19 101.6) (xy 125.73 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b557a498-cd44-42a7-a88f-0a5550159b49")
 	)
 	(wire
 		(pts
@@ -1667,7 +2616,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 165.1) (xy 46.99 165.1)
+			(xy 45.72 165.1) (xy 49.53 165.1)
 		)
 		(stroke
 			(width 0)
@@ -1687,6 +2636,16 @@
 	)
 	(wire
 		(pts
+			(xy 251.46 54.61) (xy 248.92 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bacb4cb0-92ad-40ce-bb16-420c967e1a44")
+	)
+	(wire
+		(pts
 			(xy 144.78 165.1) (xy 147.32 165.1)
 		)
 		(stroke
@@ -1694,6 +2653,16 @@
 			(type default)
 		)
 		(uuid "bba17733-bc38-490c-9973-cb6bb0a9d1cf")
+	)
+	(wire
+		(pts
+			(xy 247.65 33.02) (xy 247.65 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bc6fb727-0ae5-4481-aa5d-1a76598a53ce")
 	)
 	(wire
 		(pts
@@ -1707,13 +2676,23 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 144.78) (xy 45.72 144.78)
+			(xy 45.72 144.78) (xy 48.26 144.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "be1f232b-b15f-4b67-b84d-98862e1a3338")
+	)
+	(wire
+		(pts
+			(xy 154.94 81.28) (xy 157.48 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bf8771d7-54fa-4d93-b420-253ecd19c156")
 	)
 	(wire
 		(pts
@@ -1724,6 +2703,16 @@
 			(type default)
 		)
 		(uuid "c2e09147-e288-498a-bf4c-295d2949bd64")
+	)
+	(wire
+		(pts
+			(xy 35.56 93.98) (xy 38.1 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6d5ae0d-4d89-4de2-ac67-7a3f5abc2f4f")
 	)
 	(wire
 		(pts
@@ -1747,6 +2736,16 @@
 	)
 	(wire
 		(pts
+			(xy 157.48 121.92) (xy 157.48 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "da2b4636-bb8d-40bd-9c5f-a39a3452b26f")
+	)
+	(wire
+		(pts
 			(xy 120.65 184.15) (xy 123.19 184.15)
 		)
 		(stroke
@@ -1755,9 +2754,19 @@
 		)
 		(uuid "dfdaa4fd-1ebb-4216-bcc7-53b0148ba0e7")
 	)
+	(polyline
+		(pts
+			(xy 176.53 162.56) (xy 176.53 195.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eadc5653-9cd2-4c1b-8ecd-fda115784650")
+	)
 	(wire
 		(pts
-			(xy 43.18 187.96) (xy 46.99 187.96)
+			(xy 45.72 187.96) (xy 49.53 187.96)
 		)
 		(stroke
 			(width 0)
@@ -1797,7 +2806,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 139.7) (xy 45.72 139.7)
+			(xy 45.72 139.7) (xy 48.26 139.7)
 		)
 		(stroke
 			(width 0)
@@ -1816,17 +2825,17 @@
 		(uuid "05a11234-b6aa-4481-8144-ad0e9e1c8ef5")
 	)
 	(label "DATA_DHT22_INT"
-		(at 157.48 109.22 0)
+		(at 123.19 101.6 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "08aea0d6-2a0b-43c2-94df-408142d7c3d5")
 	)
 	(label "ONE_WIRE_TEMP"
-		(at 45.72 144.78 0)
+		(at 48.26 144.78 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1845,6 +2854,16 @@
 		)
 		(uuid "2aefaec5-4914-46fc-9470-143e983b8d65")
 	)
+	(label "I1"
+		(at 38.1 96.52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2afca9fe-7123-4eb0-aa91-7086f2b46b5d")
+	)
 	(label "RX_LORA"
 		(at 157.48 101.6 0)
 		(effects
@@ -1856,7 +2875,7 @@
 		(uuid "2d9cfe47-1b14-42f2-9761-9d1919185d40")
 	)
 	(label "DATA_DHT22_INT"
-		(at 46.99 167.64 0)
+		(at 49.53 167.64 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1864,6 +2883,16 @@
 			(justify left bottom)
 		)
 		(uuid "30f7c8c1-36cc-4538-b955-fb828c018fc1")
+	)
+	(label "SDA"
+		(at 38.1 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "389b0926-9938-4754-8bb8-e0f1ee11a1d9")
 	)
 	(label "DOUT"
 		(at 123.19 93.98 180)
@@ -1876,7 +2905,7 @@
 		(uuid "3fe0e74a-dd6c-4e6d-9646-88b7da2fc975")
 	)
 	(label "+3.7V"
-		(at 46.99 185.42 0)
+		(at 49.53 185.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1906,7 +2935,7 @@
 		(uuid "596d3629-3fa3-49fc-8d9f-57734a8f5f7f")
 	)
 	(label "ONE_WIRE_TEMP"
-		(at 45.72 127 0)
+		(at 48.26 127 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1936,7 +2965,7 @@
 		(uuid "6f8ab0bc-db21-49c7-b781-514d4a1eaba6")
 	)
 	(label "+3.7V"
-		(at 45.72 139.7 0)
+		(at 48.26 139.7 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1946,7 +2975,7 @@
 		(uuid "70a145e7-0d07-4917-b594-5638c769d86b")
 	)
 	(label "+3.7V"
-		(at 45.72 121.92 0)
+		(at 48.26 121.92 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1966,7 +2995,7 @@
 		(uuid "7581c922-ccca-4c31-914b-7c4a450be7d5")
 	)
 	(label "+3.7V"
-		(at 46.99 165.1 0)
+		(at 49.53 165.1 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1994,6 +3023,16 @@
 			(justify right bottom)
 		)
 		(uuid "9931f888-1829-410f-b933-a536d9fe01c1")
+	)
+	(label "+3.7V"
+		(at 38.1 106.68 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "99d2f8f1-f526-4809-83da-0bfefce7418f")
 	)
 	(label "PSCK"
 		(at 144.78 190.5 180)
@@ -2056,7 +3095,7 @@
 		(uuid "b5499f98-c1d9-4c22-8dcb-abb565879e26")
 	)
 	(label "DATA_DHT22_EXT"
-		(at 46.99 187.96 0)
+		(at 49.53 187.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2074,6 +3113,16 @@
 			(justify left bottom)
 		)
 		(uuid "dad2ac0b-4ba7-4e02-857c-4ca3f57c1952")
+	)
+	(label "SCL"
+		(at 38.1 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e2788778-7eb0-4e9c-ba8e-f5c2dfa617f5")
 	)
 	(label "DOUT"
 		(at 144.78 187.96 180)
@@ -2095,9 +3144,19 @@
 		)
 		(uuid "f85a81ff-4b0d-434c-ac82-f1e51ee0c311")
 	)
+	(label "I1"
+		(at 157.48 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f89bf884-f825-43eb-8d76-0f416cbbc9ef")
+	)
 	(symbol
 		(lib_id "Grove:110990030")
-		(at 33.02 165.1 0)
+		(at 35.56 165.1 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2106,7 +3165,7 @@
 		(dnp no)
 		(uuid "120efbce-205f-4fae-b0c2-5b4817720010")
 		(property "Reference" "J3"
-			(at 26.67 165.0999 0)
+			(at 29.21 165.0999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2115,7 +3174,7 @@
 			)
 		)
 		(property "Value" "DHT22_INT"
-			(at 26.67 167.6399 0)
+			(at 29.21 167.6399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2124,7 +3183,7 @@
 			)
 		)
 		(property "Footprint" "110990030:SEEED_110990030"
-			(at 33.528 148.59 0)
+			(at 36.068 148.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2134,7 +3193,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 33.02 165.1 0)
+			(at 35.56 165.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2143,7 +3202,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 33.02 165.1 0)
+			(at 35.56 165.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2152,7 +3211,7 @@
 			)
 		)
 		(property "MF" "Seeed Technology Limited"
-			(at 33.274 158.242 0)
+			(at 35.814 158.242 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2162,7 +3221,7 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HEIGHT" "8.1mm"
-			(at 16.002 163.83 0)
+			(at 18.542 163.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2172,7 +3231,7 @@
 			)
 		)
 		(property "Package" "None"
-			(at 16.764 160.782 0)
+			(at 19.304 160.782 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2182,7 +3241,7 @@
 			)
 		)
 		(property "Price" "None"
-			(at 16.002 170.434 0)
+			(at 18.542 170.434 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2192,7 +3251,7 @@
 			)
 		)
 		(property "Check_prices" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=eda"
-			(at 33.02 155.448 0)
+			(at 35.56 155.448 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2202,7 +3261,7 @@
 			)
 		)
 		(property "STANDARD" "Manufacturer Recommendations"
-			(at 31.242 141.986 0)
+			(at 33.782 141.986 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2212,7 +3271,7 @@
 			)
 		)
 		(property "PARTREV" "A"
-			(at 15.494 176.784 0)
+			(at 18.034 176.784 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2222,7 +3281,7 @@
 			)
 		)
 		(property "SnapEDA_Link" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=snap"
-			(at 32.258 152.4 0)
+			(at 34.798 152.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2232,7 +3291,7 @@
 			)
 		)
 		(property "MP" "110990030"
-			(at 15.748 166.878 0)
+			(at 18.288 166.878 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2242,7 +3301,7 @@
 			)
 		)
 		(property "Description_1" "Grove - Universal 4 pin connector"
-			(at 32.258 144.78 0)
+			(at 34.798 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2252,7 +3311,7 @@
 			)
 		)
 		(property "Availability" "In Stock"
-			(at 18.034 172.974 0)
+			(at 20.574 172.974 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2262,7 +3321,7 @@
 			)
 		)
 		(property "MANUFACTURER" "Seeed Technology"
-			(at 8.636 148.082 0)
+			(at 11.176 148.082 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2429,6 +3488,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 247.65 33.02 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "280bf634-7d11-40b6-9dc1-558a3edf3236")
+		(property "Reference" "#PWR09"
+			(at 247.65 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 247.65 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 247.65 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 247.65 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 247.65 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dd649c4e-4a4f-4605-bb91-1d89815eafdf")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "#PWR09")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:Buzzer")
 		(at 125.73 186.69 0)
 		(unit 1)
@@ -2499,6 +3624,203 @@
 		)
 	)
 	(symbol
+		(lib_id "Grove:110990030")
+		(at 261.62 57.15 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3345197e-65a7-4540-a80c-86226c7da8dd")
+		(property "Reference" "J9"
+			(at 267.97 57.1499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "CONN_XIAO"
+			(at 267.97 59.6899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "110990030:SEEED_110990030"
+			(at 261.112 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 261.62 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 261.62 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MF" "Seeed Technology Limited"
+			(at 261.366 50.292 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MAXIMUM_PACKAGE_HEIGHT" "8.1mm"
+			(at 278.638 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Package" "None"
+			(at 277.876 52.832 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Price" "None"
+			(at 278.638 62.484 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Check_prices" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=eda"
+			(at 261.62 47.498 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "STANDARD" "Manufacturer Recommendations"
+			(at 263.398 34.036 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "PARTREV" "A"
+			(at 279.146 68.834 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "SnapEDA_Link" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=snap"
+			(at 262.382 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MP" "110990030"
+			(at 278.892 58.928 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "Grove - Universal 4 pin connector"
+			(at 262.382 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Availability" "In Stock"
+			(at 276.606 65.024 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MANUFACTURER" "Seeed Technology"
+			(at 286.004 40.132 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3e0a4424-1ede-4e35-9c3b-a700a09a9d0c")
+		)
+		(pin "4"
+			(uuid "6b71245c-deb5-4a4d-81e2-b216e18b80d6")
+		)
+		(pin "1"
+			(uuid "570c4d0f-da27-4b72-a902-9b9baea77f5c")
+		)
+		(pin "3"
+			(uuid "0a6935b1-9341-4e44-9ed7-47f700f08a5c")
+		)
+		(instances
+			(project "open-ruche-monitoring"
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 144.78 181.61 0)
 		(mirror x)
@@ -2559,6 +3881,92 @@
 			(project ""
 				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
 					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x08_Pin")
+		(at 30.48 96.52 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4fe05bb7-07e8-41da-8957-ac8d995a0e13")
+		(property "Reference" "J10"
+			(at 31.115 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MMA8451"
+			(at 31.115 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Acc Adafruit:MODULE_2019"
+			(at 30.48 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 30.48 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x08, script generated"
+			(at 30.48 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8a6d1f62-09c5-467f-a9d3-b69699b4ca70")
+		)
+		(pin "1"
+			(uuid "203c8454-3ebe-4184-b505-17771763ab8d")
+		)
+		(pin "4"
+			(uuid "f0bc4abb-4f9c-475d-a34c-8971dc9a0d76")
+		)
+		(pin "5"
+			(uuid "233975ce-d3ca-4fa1-b5dc-bed02f82a45c")
+		)
+		(pin "3"
+			(uuid "edef24f0-f34e-4bf1-b372-e4464ee7ab0e")
+		)
+		(pin "6"
+			(uuid "3dc447bc-141f-4541-ac03-6ab757ef4703")
+		)
+		(pin "7"
+			(uuid "6721692f-ddd2-4778-ab7c-6291f7dba1fa")
+		)
+		(pin "8"
+			(uuid "3feef959-687e-4a6a-9fe7-845b5063b80a")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "J10")
 					(unit 1)
 				)
 			)
@@ -2756,6 +4164,72 @@
 			(project ""
 				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
 					(reference "J6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 48.26 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "635f23e7-9968-492a-8929-1c6a3de2c642")
+		(property "Reference" "#PWR011"
+			(at 48.26 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 48.26 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 48.26 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 48.26 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 48.26 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0f319eea-e30a-4f9e-9909-fb03cfd1cf09")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -2960,7 +4434,7 @@
 	)
 	(symbol
 		(lib_id "Grove:110990030")
-		(at 33.02 139.7 0)
+		(at 35.56 139.7 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2969,7 +4443,7 @@
 		(dnp no)
 		(uuid "6a693721-3209-4fbd-9008-3fdfa0d64e29")
 		(property "Reference" "J4"
-			(at 26.67 139.6999 0)
+			(at 29.21 139.6999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2978,7 +4452,7 @@
 			)
 		)
 		(property "Value" "SONDE_TEMP_1"
-			(at 26.67 142.2399 0)
+			(at 29.21 142.2399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2987,7 +4461,7 @@
 			)
 		)
 		(property "Footprint" "110990030:SEEED_110990030"
-			(at 33.528 123.19 0)
+			(at 36.068 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2997,7 +4471,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 33.02 139.7 0)
+			(at 35.56 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3006,7 +4480,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 33.02 139.7 0)
+			(at 35.56 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3015,7 +4489,7 @@
 			)
 		)
 		(property "MF" "Seeed Technology Limited"
-			(at 33.274 132.842 0)
+			(at 35.814 132.842 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3025,7 +4499,7 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HEIGHT" "8.1mm"
-			(at 16.002 138.43 0)
+			(at 18.542 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3035,7 +4509,7 @@
 			)
 		)
 		(property "Package" "None"
-			(at 16.764 135.382 0)
+			(at 19.304 135.382 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3045,7 +4519,7 @@
 			)
 		)
 		(property "Price" "None"
-			(at 16.002 145.034 0)
+			(at 18.542 145.034 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3055,7 +4529,7 @@
 			)
 		)
 		(property "Check_prices" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=eda"
-			(at 33.02 130.048 0)
+			(at 35.56 130.048 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3065,7 +4539,7 @@
 			)
 		)
 		(property "STANDARD" "Manufacturer Recommendations"
-			(at 31.242 116.586 0)
+			(at 33.782 116.586 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3075,7 +4549,7 @@
 			)
 		)
 		(property "PARTREV" "A"
-			(at 15.494 151.384 0)
+			(at 18.034 151.384 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3085,7 +4559,7 @@
 			)
 		)
 		(property "SnapEDA_Link" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=snap"
-			(at 32.258 127 0)
+			(at 34.798 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3095,7 +4569,7 @@
 			)
 		)
 		(property "MP" "110990030"
-			(at 15.748 141.478 0)
+			(at 18.288 141.478 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3105,7 +4579,7 @@
 			)
 		)
 		(property "Description_1" "Grove - Universal 4 pin connector"
-			(at 32.258 119.38 0)
+			(at 34.798 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3115,7 +4589,7 @@
 			)
 		)
 		(property "Availability" "In Stock"
-			(at 18.034 147.574 0)
+			(at 20.574 147.574 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3125,7 +4599,7 @@
 			)
 		)
 		(property "MANUFACTURER" "Seeed Technology"
-			(at 8.636 122.682 0)
+			(at 11.176 122.682 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3150,6 +4624,72 @@
 			(project ""
 				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
 					(reference "J4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 123.19 123.19 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "76482e89-c328-4858-b6c1-9f22d6222a48")
+		(property "Reference" "#PWR014"
+			(at 123.19 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 123.19 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 123.19 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 123.19 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 123.19 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4c3f0458-15e4-4344-9d13-c4621cf6ffc9")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -3225,7 +4765,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 46.99 181.61 0)
+		(at 48.26 181.61 0)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3234,7 +4774,7 @@
 		(dnp no)
 		(uuid "7e87506e-ff23-4666-870e-2bae9e00a039")
 		(property "Reference" "#PWR02"
-			(at 46.99 175.26 0)
+			(at 48.26 175.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3243,7 +4783,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 46.99 176.53 0)
+			(at 48.26 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3251,7 +4791,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 46.99 181.61 0)
+			(at 48.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3260,7 +4800,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 46.99 181.61 0)
+			(at 48.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3269,7 +4809,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 46.99 181.61 0)
+			(at 48.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3291,7 +4831,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 46.99 161.29 0)
+		(at 48.26 161.29 0)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3300,7 +4840,7 @@
 		(dnp no)
 		(uuid "827abf94-fd45-427f-977e-a9fdd35c396d")
 		(property "Reference" "#PWR03"
-			(at 46.99 154.94 0)
+			(at 48.26 154.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3309,7 +4849,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 46.99 156.21 0)
+			(at 48.26 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3317,7 +4857,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 46.99 161.29 0)
+			(at 48.26 161.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3326,7 +4866,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 46.99 161.29 0)
+			(at 48.26 161.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3335,7 +4875,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 46.99 161.29 0)
+			(at 48.26 161.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3350,6 +4890,138 @@
 			(project "open-ruche-monitoring"
 				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
 					(reference "#PWR03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 38.1 87.63 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "82b1fc31-884c-4763-acfc-48048a59548e")
+		(property "Reference" "#PWR012"
+			(at 38.1 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 38.1 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 38.1 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dc88e31f-16af-465f-a299-2b37b6bf67d1")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "#PWR012")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 157.48 123.19 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8d9877fe-451d-438a-8bc6-0c5ffa962392")
+		(property "Reference" "#PWR013"
+			(at 157.48 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 157.48 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 157.48 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 157.48 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 157.48 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0b242319-175c-4650-9c6a-55d57959ad82")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -3416,6 +5088,72 @@
 			(project "open-ruche-monitoring"
 				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
 					(reference "#PWR06")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 67.31 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9477faa1-93c9-41ce-a703-23ad30e21685")
+		(property "Reference" "#PWR015"
+			(at 67.31 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 67.31 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 67.31 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 67.31 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 67.31 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8bcda6cb-95b4-4a71-a596-76dc20867a12")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -3581,16 +5319,16 @@
 	)
 	(symbol
 		(lib_id "Grove:110990030")
-		(at 33.02 121.92 0)
-		(mirror y)
+		(at 260.35 36.83 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a4959c7b-e7d3-4454-a10f-3dbb5c68cea3")
-		(property "Reference" "J5"
-			(at 26.67 121.9199 0)
+		(fields_autoplaced yes)
+		(uuid "9e5ac9ba-d3a8-4603-9cce-36c8a90ec67c")
+		(property "Reference" "J8"
+			(at 266.7 36.8299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3598,8 +5336,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SONDE_TEMP_2"
-			(at 26.67 124.4599 0)
+		(property "Value" "CONN_ARDUINO"
+			(at 266.7 39.3699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3608,7 +5346,7 @@
 			)
 		)
 		(property "Footprint" "110990030:SEEED_110990030"
-			(at 33.528 105.41 0)
+			(at 259.842 20.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3618,7 +5356,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 33.02 121.92 0)
+			(at 260.35 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3627,7 +5365,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 33.02 121.92 0)
+			(at 260.35 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3636,7 +5374,7 @@
 			)
 		)
 		(property "MF" "Seeed Technology Limited"
-			(at 33.274 115.062 0)
+			(at 260.096 29.972 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3646,7 +5384,7 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HEIGHT" "8.1mm"
-			(at 16.002 120.65 0)
+			(at 277.368 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3656,7 +5394,7 @@
 			)
 		)
 		(property "Package" "None"
-			(at 16.764 117.602 0)
+			(at 276.606 32.512 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3666,7 +5404,7 @@
 			)
 		)
 		(property "Price" "None"
-			(at 16.002 127.254 0)
+			(at 277.368 42.164 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3676,7 +5414,7 @@
 			)
 		)
 		(property "Check_prices" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=eda"
-			(at 33.02 112.268 0)
+			(at 260.35 27.178 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3686,7 +5424,7 @@
 			)
 		)
 		(property "STANDARD" "Manufacturer Recommendations"
-			(at 31.242 98.806 0)
+			(at 262.128 13.716 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3696,7 +5434,7 @@
 			)
 		)
 		(property "PARTREV" "A"
-			(at 15.494 133.604 0)
+			(at 277.876 48.514 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3706,7 +5444,7 @@
 			)
 		)
 		(property "SnapEDA_Link" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=snap"
-			(at 32.258 109.22 0)
+			(at 261.112 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3716,7 +5454,7 @@
 			)
 		)
 		(property "MP" "110990030"
-			(at 15.748 123.698 0)
+			(at 277.622 38.608 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3726,7 +5464,7 @@
 			)
 		)
 		(property "Description_1" "Grove - Universal 4 pin connector"
-			(at 32.258 101.6 0)
+			(at 261.112 16.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3736,7 +5474,7 @@
 			)
 		)
 		(property "Availability" "In Stock"
-			(at 18.034 129.794 0)
+			(at 275.336 44.704 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3746,7 +5484,204 @@
 			)
 		)
 		(property "MANUFACTURER" "Seeed Technology"
-			(at 8.636 104.902 0)
+			(at 284.734 19.812 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "13055ec4-b06e-45b0-8180-e9b63bd1e4db")
+		)
+		(pin "4"
+			(uuid "51e962d7-08a3-402a-acd2-bd1d2a0962c9")
+		)
+		(pin "1"
+			(uuid "fd705a22-a565-40db-9019-c307ec34d5a9")
+		)
+		(pin "3"
+			(uuid "c8389a5c-1cee-44e3-b418-57412e77efab")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "J8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Grove:110990030")
+		(at 35.56 121.92 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a4959c7b-e7d3-4454-a10f-3dbb5c68cea3")
+		(property "Reference" "J5"
+			(at 29.21 121.9199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SONDE_TEMP_2"
+			(at 29.21 124.4599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "110990030:SEEED_110990030"
+			(at 36.068 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 35.56 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 35.56 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MF" "Seeed Technology Limited"
+			(at 35.814 115.062 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MAXIMUM_PACKAGE_HEIGHT" "8.1mm"
+			(at 18.542 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Package" "None"
+			(at 19.304 117.602 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Price" "None"
+			(at 18.542 127.254 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Check_prices" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=eda"
+			(at 35.56 112.268 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "STANDARD" "Manufacturer Recommendations"
+			(at 33.782 98.806 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "PARTREV" "A"
+			(at 18.034 133.604 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "SnapEDA_Link" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=snap"
+			(at 34.798 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MP" "110990030"
+			(at 18.288 123.698 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "Grove - Universal 4 pin connector"
+			(at 34.798 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Availability" "In Stock"
+			(at 20.574 129.794 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MANUFACTURER" "Seeed Technology"
+			(at 11.176 104.902 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3771,6 +5706,72 @@
 			(project "open-ruche-monitoring"
 				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
 					(reference "J5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 248.92 53.34 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a8a1fa95-798f-4448-a065-57fb2f1f3afd")
+		(property "Reference" "#PWR010"
+			(at 248.92 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 248.92 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 248.92 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 248.92 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 248.92 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ab817738-57b4-4338-b784-f01428549952")
+		)
+		(instances
+			(project "open-ruche-monitoring"
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -4040,8 +6041,223 @@
 		)
 	)
 	(symbol
+		(lib_id "Pololu:STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3")
+		(at 49.53 36.83 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "dabe77c6-8793-42a3-8264-9e32d50cfbce")
+		(property "Reference" "U2"
+			(at 49.53 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "3.3V-STEP-DOWN_VOLTAGE_REGULATOR_S7V8F3"
+			(at 49.53 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Pololu:MODULE_STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MF" "Pololu"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MAXIMUM_PACKAGE_HEIGHT" "2.54mm"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "CREATOR" "NEZY"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Price" "None"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Package" "None"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Check_prices" "https://www.snapeda.com/parts/STEP-DOWN%20VOLTAGE%20REGULATOR%20D24V6F3/Pololu/view-part/?ref=eda"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "STANDARD" "Manufacturer Recommendations"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "PARTREV" "NA"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "VERIFIER" ""
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "SnapEDA_Link" "https://www.snapeda.com/parts/STEP-DOWN%20VOLTAGE%20REGULATOR%20D24V6F3/Pololu/view-part/?ref=snap"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MP" "STEP-DOWN VOLTAGE REGULATOR D24V6F3"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "Converter: step down; Uin: 3.8÷42V; Uout: 3.3V; 600mA; 80÷90%"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Availability" "Not in stock"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MANUFACTURER" "Pololu"
+			(at 49.53 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(pin "VOUT"
+			(uuid "850c2b77-f774-4a50-ab6a-08b74d04b63e")
+		)
+		(pin "!SHDN"
+			(uuid "ec6e767f-5b17-4f2d-a6c1-2b9b50da604f")
+		)
+		(pin "VIN"
+			(uuid "90ad2885-6fc7-4481-a887-c040ca9970f7")
+		)
+		(pin "GND"
+			(uuid "3e57ac5b-7ef1-4043-ad89-fec252150237")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
-		(at 45.72 118.11 0)
+		(at 48.26 118.11 0)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4050,7 +6266,7 @@
 		(dnp no)
 		(uuid "f238a245-8caf-4697-8e40-6e5563675943")
 		(property "Reference" "#PWR05"
-			(at 45.72 111.76 0)
+			(at 48.26 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4059,7 +6275,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 45.72 113.03 0)
+			(at 48.26 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4067,7 +6283,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 45.72 118.11 0)
+			(at 48.26 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4076,7 +6292,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 45.72 118.11 0)
+			(at 48.26 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4085,7 +6301,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 45.72 118.11 0)
+			(at 48.26 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4107,7 +6323,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 45.72 135.89 0)
+		(at 48.26 135.89 0)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4116,7 +6332,7 @@
 		(dnp no)
 		(uuid "f305e17c-c20f-456d-b721-34d2e5d68794")
 		(property "Reference" "#PWR04"
-			(at 45.72 129.54 0)
+			(at 48.26 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4125,7 +6341,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 45.72 130.81 0)
+			(at 48.26 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4133,7 +6349,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 45.72 135.89 0)
+			(at 48.26 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4142,7 +6358,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 45.72 135.89 0)
+			(at 48.26 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4151,7 +6367,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 45.72 135.89 0)
+			(at 48.26 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4173,7 +6389,7 @@
 	)
 	(symbol
 		(lib_id "Grove:110990030")
-		(at 33.02 185.42 0)
+		(at 35.56 185.42 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4182,7 +6398,7 @@
 		(dnp no)
 		(uuid "fa68296c-c3ca-4a7b-b890-ec56126948fe")
 		(property "Reference" "J2"
-			(at 26.67 185.4199 0)
+			(at 29.21 185.4199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4191,7 +6407,7 @@
 			)
 		)
 		(property "Value" "DHT22_EXT"
-			(at 26.67 187.9599 0)
+			(at 29.21 187.9599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4200,7 +6416,7 @@
 			)
 		)
 		(property "Footprint" "110990030:SEEED_110990030"
-			(at 33.528 168.91 0)
+			(at 36.068 168.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4210,7 +6426,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 33.02 185.42 0)
+			(at 35.56 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4219,7 +6435,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 33.02 185.42 0)
+			(at 35.56 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4228,7 +6444,7 @@
 			)
 		)
 		(property "MF" "Seeed Technology Limited"
-			(at 33.274 178.562 0)
+			(at 35.814 178.562 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4238,7 +6454,7 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HEIGHT" "8.1mm"
-			(at 16.002 184.15 0)
+			(at 18.542 184.15 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4248,7 +6464,7 @@
 			)
 		)
 		(property "Package" "None"
-			(at 16.764 181.102 0)
+			(at 19.304 181.102 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4258,7 +6474,7 @@
 			)
 		)
 		(property "Price" "None"
-			(at 16.002 190.754 0)
+			(at 18.542 190.754 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4268,7 +6484,7 @@
 			)
 		)
 		(property "Check_prices" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=eda"
-			(at 33.02 175.768 0)
+			(at 35.56 175.768 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4278,7 +6494,7 @@
 			)
 		)
 		(property "STANDARD" "Manufacturer Recommendations"
-			(at 31.242 162.306 0)
+			(at 33.782 162.306 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4288,7 +6504,7 @@
 			)
 		)
 		(property "PARTREV" "A"
-			(at 15.494 197.104 0)
+			(at 18.034 197.104 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4298,7 +6514,7 @@
 			)
 		)
 		(property "SnapEDA_Link" "https://www.snapeda.com/parts/110990030/Seeed+Studio/view-part/?ref=snap"
-			(at 32.258 172.72 0)
+			(at 34.798 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4308,7 +6524,7 @@
 			)
 		)
 		(property "MP" "110990030"
-			(at 15.748 187.198 0)
+			(at 18.288 187.198 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4318,7 +6534,7 @@
 			)
 		)
 		(property "Description_1" "Grove - Universal 4 pin connector"
-			(at 32.258 165.1 0)
+			(at 34.798 165.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4328,7 +6544,7 @@
 			)
 		)
 		(property "Availability" "In Stock"
-			(at 18.034 193.294 0)
+			(at 20.574 193.294 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4338,7 +6554,7 @@
 			)
 		)
 		(property "MANUFACTURER" "Seeed Technology"
-			(at 8.636 168.402 0)
+			(at 11.176 168.402 0)
 			(effects
 				(font
 					(size 1.27 1.27)
