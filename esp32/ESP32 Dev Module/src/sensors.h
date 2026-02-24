@@ -15,6 +15,11 @@
 #include "HX711.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include "errors.h"
+
+// Error values for sensors
+#define SENSOR_ERROR_VALUE -32768
+#define SENSOR_LUX_ERROR_VALUE 0
 
 #define HX711_DOUT_PIN 32 // DT pin
 #define HX711_SCK_PIN 33  // SCK pin
@@ -51,7 +56,7 @@ int16_t read_hx711();
 DHT22Result read_dht22(DHT& dht, const char* sensorName);
 
 // returns the temperature inside the hive reading from DS18B20 sondes
-int16_t read_ds18b20_sonde(DeviceAddress sensor);
+int16_t read_ds18b20_sonde(DeviceAddress sensor, const char* sensorName);
 
 // returns the luminosity outside the hive reading from SEN0562 sensor
 uint16_t read_sen0562();

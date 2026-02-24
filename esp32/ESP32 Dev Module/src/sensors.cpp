@@ -26,19 +26,34 @@ int16_t read_hx711() {
 /* DHT22 */
 DHT22Result read_dht22(DHT& dht, const char* sensorName){
 	DHT22Result result;
-	result.humidity = (int8_t)(dht.readHumidity());
-	result.temperature = (int16_t)(dht.readTemperature()*10);
+	float humidity = dht.readHumidity();
+	float temperature = dht.readTemperature();
+	
+	if (isnan(humidity) || isnan(temperature)) {
+		logError(ERR_SENSOR_READ_FAILED, sensorName);
+		result.humidity = 0;
+		result.temperature = SENSOR_ERROR_VALUE;
+		return result;
+	}
+	
+	result.humidity = (int8_t)humidity;
+	result.temperature = (int16_t)(temperature * 10);
 	return result;
 }
 
 /* DS18B20 */
-int16_t read_ds18b20_sonde(DeviceAddress sensorAddr) {
+int16_t read_ds18b20_sonde(DeviceAddress sensorAddr, const char* sensorName) {
     sondes.requestTemperatures();
     if (sondes.isConnected(sensorAddr)) {
-        return (int16_t)(sondes.getTempC(sensorAddr)*10);
+        float temp = sondes.getTempC(sensorAddr);
+        if (temp == DEVICE_DISCONNECTED_C) {
+            logError(ERR_SENSOR_READ_FAILED, sensorName);
+            return SENSOR_ERROR_VALUE;
+        }
+        return (int16_t)(temp * 10);
     } else {
-        Serial.print("Sensor not connected!");
-        return -32768;
+        logError(ERR_DEVICE_NOT_FOUND, sensorName);
+        return SENSOR_ERROR_VALUE;
     }
 }
 
@@ -47,9 +62,16 @@ uint16_t read_sen0562() {
     uint8_t buf[2] = {0};
     Wire.beginTransmission(SEN0562_ADDR);
     Wire.write(0x10);
-    if (Wire.endTransmission() != 0) return 0;
+    if (Wire.endTransmission() != 0) {
+        logError(ERR_I2C_COMMUNICATION_FAILED, "SEN0562");
+        return SENSOR_LUX_ERROR_VALUE;
+    }
     delay(20);
     Wire.requestFrom(SEN0562_ADDR, (uint8_t)2);
+    if (Wire.available() < 2) {
+        logError(ERR_INVALID_DATA, "SEN0562");
+        return SENSOR_LUX_ERROR_VALUE;
+    }
     for (uint8_t i = 0; i < 2; i++) {
         buf[i] = Wire.read();
     }
