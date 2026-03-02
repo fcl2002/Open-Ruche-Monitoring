@@ -27,7 +27,7 @@
 				(justify left top)
 			)
 		)
-		(property "Footprint" "110990030:SEEED_110990030"
+		(property "Footprint" "Grove:SEEED_110990030"
 			(at -0.508 16.51 0)
 			(effects
 				(font
