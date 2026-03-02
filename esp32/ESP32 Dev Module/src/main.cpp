@@ -3,7 +3,7 @@
 #include "errors.h"
 #include "logger.h"
 
-// #define SEN0562_ADDR 0x1C // ACC I2C address
+//GPIO HOLD ENABLE
 
 bool setupDelayDone = false;
 unsigned long setupStartTime = 0;
@@ -68,7 +68,7 @@ void setup() {
     logInfo("Setup complete. System ready.", "SYSTEM");
 }
 
-uint8_t payload[18];  // 1 + 2 + 1 + 2 + 2 + 2 + 2 + 2 + 2 + 2 = 18 bytes
+uint8_t payload[20];  // 1 + 2 + 1 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 = 18 bytes
 
 void loop() {
     if (!setupDelayDone) {
@@ -82,44 +82,46 @@ void loop() {
         logInfo("Starting sensor readings...", "LOOP");
         int idx = 0;
 
-        read_hx711();
+        DHT22Result ext_dht22 = read_dht22(external_dht, "External DHT22");
+        payload[idx++] = ext_dht22.humidity;
+        memcpy(&payload[idx], &ext_dht22.temperature, sizeof(int16_t)); 
+        idx += 2;
+        
+        DHT22Result int_dht22 = read_dht22(internal_dht, "Internal DHT22");
+        payload[idx++] = int_dht22.humidity;
+        memcpy(&payload[idx], &int_dht22.temperature, sizeof(int16_t)); 
+        idx += 2;
+        
+        int16_t sonde1_read = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
+        memcpy(&payload[idx], &sonde1_read, sizeof(int16_t)); 
+        idx += 2;
 
-        // DHT22Result ext_dht22 = read_dht22(external_dht, "External DHT22");
-        // payload[idx++] = ext_dht22.humidity;
-        // memcpy(&payload[idx], &ext_dht22.temperature, sizeof(int16_t)); 
-        // idx += 2;
+        int16_t sonde2_read = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
+        memcpy(&payload[idx], &sonde2_read, sizeof(int16_t)); 
+        idx += 2;
         
-        // DHT22Result int_dht22 = read_dht22(internal_dht, "Internal DHT22");
-        // payload[idx++] = int_dht22.humidity;
-        // memcpy(&payload[idx], &int_dht22.temperature, sizeof(int16_t)); 
-        // idx += 2;
+        uint16_t lux_read = read_sen0562();
+        memcpy(&payload[idx], &lux_read, sizeof(uint16_t)); 
+        idx += 2;
         
-        // int16_t sonde1_read = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
-        // memcpy(&payload[idx], &sonde1_read, sizeof(int16_t)); 
-        // idx += 2;
+        AccelResult accel_data = read_mma8451();
+        memcpy(&payload[idx], &accel_data.x, sizeof(int16_t)); 
+        idx += 2;
+        memcpy(&payload[idx], &accel_data.y, sizeof(int16_t)); 
+        idx += 2;
+        memcpy(&payload[idx], &accel_data.z, sizeof(int16_t)); 
+        idx += 2;
 
-        // int16_t sonde2_read = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
-        // memcpy(&payload[idx], &sonde2_read, sizeof(int16_t)); 
-        // idx += 2;
-        
-        // int16_t lux_read = read_sen0562();
-        // memcpy(&payload[idx], &lux_read, sizeof(int16_t)); 
-        // idx += 2;
-        
-        // AccelResult accel_data = read_mma8451();
-        // memcpy(&payload[idx], &accel_data.x, sizeof(int16_t)); 
-        // idx += 2;
-        // memcpy(&payload[idx], &accel_data.y, sizeof(int16_t)); 
-        // idx += 2;
-        // memcpy(&payload[idx], &accel_data.z, sizeof(int16_t)); 
-        // idx += 2;
+        uint16_t loadcell_data = read_hx711();
+        memcpy(&payload[idx], &loadcell_data, sizeof(uint16_t)); 
+        idx += 2;
 
-        // logDebug("Payload ready for transmission", "LOOP");
-        // for (int i = 0; i < 18; i++) {
-        //     Serial.print(payload[i]); // ou DEC
-        //     Serial.print(" ");
-        // }
-        // Serial.println();
+        logDebug("Payload ready for transmission", "LOOP");
+        for (int i = 0; i < 20; i++) {
+            Serial.print(payload[i], HEX); // ou DEC
+            Serial.print(" ");
+        }
+        Serial.println();
         lastRead = millis();
     }
 }

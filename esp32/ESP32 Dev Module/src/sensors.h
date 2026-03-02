@@ -62,7 +62,7 @@ struct AccelResult {
 };
 
 // returns the weight of the hive from the HX711 module
-int16_t read_hx711();
+uint16_t read_hx711();
 		
 // returns temperature and humidity reading from DHT22 sensor
 DHT22Result read_dht22(DHT& dht, const char* sensorName);

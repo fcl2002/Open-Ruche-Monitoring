@@ -15,14 +15,14 @@ DeviceAddress sonde2 = {0x28, 0x33, 0xBA, 0x69, 0x10, 0x00, 0x00, 0x11};
 Adafruit_MMA8451 mma = Adafruit_MMA8451();
 
 /* HX711 */
-int16_t read_hx711() {
+uint16_t read_hx711() {
 	hx711.power_up();
 	float units = hx711.get_units(10);
 	Serial.print("Weight: ");
-	Serial.print(units, 2);
+	Serial.print(units*100, 0);
 	Serial.println(" kg");
 	hx711.power_down();
-	return (int16_t)(units*10);
+	return (uint16_t)(units*100);
 }
 
 /* DHT22 */
