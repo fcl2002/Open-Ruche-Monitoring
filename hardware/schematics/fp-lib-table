@@ -5,4 +5,7 @@
   (lib (name "Acc Adafruit")(type "KiCad")(uri "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_mma_adafruit")(options "")(descr ""))
   (lib (name "Pololu")(type "KiCad")(uri "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_pololu_regulator")(options "")(descr ""))
   (lib (name "KPEG222")(type "KiCad")(uri "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_kpeg222")(options "")(descr ""))
+  (lib (name "hx711_grove")(type "KiCad")(uri "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_hx711_grove/hx711_grove.pretty")(options "")(descr ""))
+  (lib (name "lora_grove")(type "KiCad")(uri "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_lora_grove/lora_grove.pretty")(options "")(descr ""))
+  (lib (name "lipo_charger")(type "KiCad")(uri "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_lipo_charger/lipo_charger.pretty")(options "")(descr ""))
 )
