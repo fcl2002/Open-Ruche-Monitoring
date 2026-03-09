@@ -1,127 +1,58 @@
 #include <Arduino.h>
+#include "config.h"
 #include "sensors.h"
 #include "errors.h"
 #include "logger.h"
+#include "payload.h"
+#include "sleep.h"
 
-//GPIO HOLD ENABLE
-
-bool setupDelayDone = false;
-unsigned long setupStartTime = 0;
+RTC_DATA_ATTR int bootCount = 0;
 
 void setup() {
-	Serial.begin(115200);
-	delay(100);  // Wait for serial to stabilize
-	
-	// Set log level (can be changed to LOG_DEBUG for verbose output)
-	setLogLevel(LOG_INFO);
-	
-	logInfo("Open Ruche Monitoring System Starting...", "SYSTEM");
-    setupStartTime = millis();
+    Serial.begin(115200);
+    delay(100);
 
-    // HX711
-    logInfo("Initializing HX711...", "SETUP");
-	hx711.begin(HX711_DOUT_PIN, HX711_SCK_PIN);
-	delay(200);
-	hx711.set_scale(30148);
-	hx711.set_offset(134750);
-	delay(200);
+    ++bootCount;
+    Serial.println("\n----------------------");
+    Serial.println(String(bootCount) + "th Boot");
 
-    // DHT22
-    logInfo("Initializing DHT22 sensors...", "SETUP");
-	external_dht.begin();
-	internal_dht.begin();
+    sleep_gpio_release();
 
-	// DS18B20 Sondes
-	logInfo("Initializing DS18B20 sensors...", "SETUP");
-	sondes.begin();
-    
-    int deviceCount = sondes.getDeviceCount();
-    char msg[50];
-    snprintf(msg, sizeof(msg), "Found %d DS18B20 device(s)", deviceCount);
-    logInfo(msg, "SETUP");
-    
-    if (deviceCount > 0) {
-        sondes.getAddress(sonde1, 0);
-    } else {
-        logError(ERR_DEVICE_NOT_FOUND, "DS18B20 Sonde 1");
-    }
-    
-    if (deviceCount > 1) {
-        sondes.getAddress(sonde2, 1);
-    } else if (deviceCount == 1) {
-        logError(ERR_DEVICE_NOT_FOUND, "DS18B20 Sonde 2");
-    }
+    setLogLevel(LOG_INFO);
+    print_wakeup_reason();
 
-    // SEN0562
-    logInfo("Initializing I2C for SEN0562...", "SETUP");
-    Wire.begin(); // using default SDA/SCL
-    
-    // MMA8451 Accelerometer
-    logInfo("Initializing MMA8451 accelerometer...", "SETUP");
-    if (!mma.begin(MMA8451_ADDR)) {
-        logError(ERR_DEVICE_NOT_FOUND, "MMA8451");
-    } else {
-        mma.setRange(MMA8451_RANGE_2_G);  // Set range to 2G for better precision
-        logInfo("MMA8451 initialized successfully", "SETUP");
-    }
-    
+    logInfo("Open Ruche Monitoring System Starting...", "SYSTEM");
+    init_sensors();
     logInfo("Setup complete. System ready.", "SYSTEM");
 }
 
-uint8_t payload[20];  // 1 + 2 + 1 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 = 18 bytes
-
 void loop() {
-    if (!setupDelayDone) {
-        if (millis() - setupStartTime >= TIME_SETUP)
-            setupDelayDone = true;
-        return;
-    }
+    logInfo("Starting sensor readings...", "LOOP");
 
-    // Read DHT22 every 10 minutes
-    if (millis() - lastRead >= TIME_TO_READ) {
-        logInfo("Starting sensor readings...", "LOOP");
-        int idx = 0;
+    SensorPayload payload = {};
 
-        DHT22Result ext_dht22 = read_dht22(external_dht, "External DHT22");
-        payload[idx++] = ext_dht22.humidity;
-        memcpy(&payload[idx], &ext_dht22.temperature, sizeof(int16_t)); 
-        idx += 2;
-        
-        DHT22Result int_dht22 = read_dht22(internal_dht, "Internal DHT22");
-        payload[idx++] = int_dht22.humidity;
-        memcpy(&payload[idx], &int_dht22.temperature, sizeof(int16_t)); 
-        idx += 2;
-        
-        int16_t sonde1_read = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
-        memcpy(&payload[idx], &sonde1_read, sizeof(int16_t)); 
-        idx += 2;
+    DHT22Result ext_dht22 = read_dht22(external_dht, "External DHT22");
+    payload.ext_humidity = ext_dht22.humidity;
+    payload.ext_temperature = ext_dht22.temperature;
 
-        int16_t sonde2_read = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
-        memcpy(&payload[idx], &sonde2_read, sizeof(int16_t)); 
-        idx += 2;
-        
-        uint16_t lux_read = read_sen0562();
-        memcpy(&payload[idx], &lux_read, sizeof(uint16_t)); 
-        idx += 2;
-        
-        AccelResult accel_data = read_mma8451();
-        memcpy(&payload[idx], &accel_data.x, sizeof(int16_t)); 
-        idx += 2;
-        memcpy(&payload[idx], &accel_data.y, sizeof(int16_t)); 
-        idx += 2;
-        memcpy(&payload[idx], &accel_data.z, sizeof(int16_t)); 
-        idx += 2;
+    DHT22Result int_dht22 = read_dht22(internal_dht, "Internal DHT22");
+    payload.int_humidity = int_dht22.humidity;
+    payload.int_temperature = int_dht22.temperature;
 
-        uint16_t loadcell_data = read_hx711();
-        memcpy(&payload[idx], &loadcell_data, sizeof(uint16_t)); 
-        idx += 2;
+    payload.sonde1_temperature = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
+    payload.sonde2_temperature = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
 
-        logDebug("Payload ready for transmission", "LOOP");
-        for (int i = 0; i < 20; i++) {
-            Serial.print(payload[i], HEX); // ou DEC
-            Serial.print(" ");
-        }
-        Serial.println();
-        lastRead = millis();
-    }
+    payload.lux = read_sen0562();
+
+    AccelResult accel = read_mma8451();
+    payload.accel_x = accel.x;
+    payload.accel_y = accel.y;
+    payload.accel_z = accel.z;
+
+    payload.weight              = read_hx711();
+
+    // TODO: transmit (uint8_t*)&payload, sizeof(SensorPayload)
+
+    Serial.flush();
+    enter_deep_sleep();
 }
