@@ -2605,10 +2605,6 @@
 		(uuid "c8a8237f-e82b-42f6-b88e-c7b791019a89")
 	)
 	(no_connect
-		(at 154.94 96.52)
-		(uuid "ce954eef-c2f8-4275-a523-aa9278605157")
-	)
-	(no_connect
 		(at 154.94 86.36)
 		(uuid "d035b94c-128d-4987-a8c5-6ada38e5aa5f")
 	)
@@ -2739,6 +2735,16 @@
 			(type default)
 		)
 		(uuid "1b5efffb-fed8-4460-9efb-b73a5972169a")
+	)
+	(wire
+		(pts
+			(xy 170.18 96.52) (xy 170.18 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "205b8abe-c5eb-4012-b68f-18dc44725c4b")
 	)
 	(wire
 		(pts
@@ -3432,6 +3438,16 @@
 	)
 	(wire
 		(pts
+			(xy 154.94 96.52) (xy 170.18 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d366de95-9072-4038-b338-b235030b9f7f")
+	)
+	(wire
+		(pts
 			(xy 144.78 187.96) (xy 147.32 187.96)
 		)
 		(stroke
@@ -3950,7 +3966,7 @@
 		)
 		(uuid "aad9b942-06ec-410c-a049-5030b97c9352")
 	)
-	(label "+3.3V_REG"
+	(label "+3.3V"
 		(at 93.98 185.42 180)
 		(effects
 			(font
@@ -4292,6 +4308,72 @@
 			(project "open-ruche-monitoring"
 				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
 					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 170.18 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "175d880b-5ec3-4d75-8650-366ac3d1964b")
+		(property "Reference" "#PWR012"
+			(at 170.18 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 170.18 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 170.18 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 170.18 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 170.18 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e7c127e0-2070-4a9e-bd6c-74bd03e32cc2")
+		)
+		(instances
+			(project ""
+				(path "/e6969a1e-07e0-44a4-bb0c-208cafbc127d"
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
