@@ -40,4 +40,15 @@
 #define SENSOR_LUX_ERROR_VALUE  0
 #define ACCEL_ERROR_VALUE       -32768
 
+// ── LoRa-E5 UART ─────────────────────────────────────────────
+#define LORA_RX_PIN              16          // ESP32 GPIO connected to LoRa-E5 TX
+#define LORA_TX_PIN              17          // ESP32 GPIO connected to LoRa-E5 RX
+#define LORA_SERIAL_NUM          2           // ESP32 HardwareSerial index
+#define LORA_DEFAULT_INTERVAL_MS 5000UL     // Default uplink interval (30 s)
+
+// ── TTN OTAA credentials ─────────────────────────────────────
+#define LORA_DEV_EUI  "70B3D57ED0075CEE"
+#define LORA_APP_EUI  "0000000000000000"
+#define LORA_APP_KEY  "3EEA512460C979FF5FE036D9FAEB077D"
+
 #endif /* CONFIG_H */

@@ -12,16 +12,16 @@ DallasTemperature sondes(&oneWire);
 DeviceAddress sonde1 = {0x28, 0x4C, 0xB5, 0x68, 0x10, 0x00, 0x00, 0x4D}; //fil orange
 DeviceAddress sonde2 = {0x28, 0x33, 0xBA, 0x69, 0x10, 0x00, 0x00, 0x11};
 
-void init_sensors() {
-    init_hx711();
+void sensors_init(void) {
+    hx711_init();
 	external_dht.begin();
 	internal_dht.begin();
     logInfo("DHT22 sensors initialized", "SETUP");
-    init_ds18b20();
+    sondes_init();
     init_mma8451();
 }
 
-void init_hx711(void) {
+void hx711_init(void) {
     hx711.begin(HX711_DOUT_PIN, HX711_SCK_PIN);
 	vTaskDelay(200);
 	hx711.set_scale(HX711_SCALE);
@@ -30,7 +30,7 @@ void init_hx711(void) {
     logInfo("HX711 initialized: scale=30148, offset=134750", "SETUP");
 }
 
-void init_ds18b20(void) {
+void sondes_init(void) {
     sondes.begin();
     int deviceCount = sondes.getDeviceCount();
     

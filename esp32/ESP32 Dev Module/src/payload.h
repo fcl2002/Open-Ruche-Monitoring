@@ -13,7 +13,7 @@
 #include <stdint.h>
 
 // Packed struct — byte layout matches the radio transmission format.
-// Total: 19 bytes
+// Total: 20 bytes
 #pragma pack(push, 1)
 struct SensorPayload {
     int8_t   ext_humidity;       // External DHT22 humidity (%)

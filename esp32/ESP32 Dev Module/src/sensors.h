@@ -36,7 +36,9 @@ struct DHT22Result {
 };
 
 // init sensors
-void init_sensors();
+void hx711_init();
+void sondes_init();
+void sensors_init();
 
 // returns the weight of the hive from the HX711 module
 uint16_t read_hx711();
