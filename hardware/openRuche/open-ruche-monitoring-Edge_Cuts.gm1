@@ -1,0 +1,23 @@
+%TF.GenerationSoftware,KiCad,Pcbnew,9.0.7*%
+%TF.CreationDate,2026-03-10T17:21:23+01:00*%
+%TF.ProjectId,open-ruche-monitoring,6f70656e-2d72-4756-9368-652d6d6f6e69,rev?*%
+%TF.SameCoordinates,Original*%
+%TF.FileFunction,Profile,NP*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW 9.0.7) date 2026-03-10 17:21:23*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+%TA.AperFunction,Profile*%
+%ADD10C,0.050000*%
+%TD*%
+G04 APERTURE END LIST*
+D10*
+X119000000Y-43000000D02*
+X205400000Y-43000000D01*
+X205400000Y-124900000D01*
+X119000000Y-124900000D01*
+X119000000Y-43000000D01*
+M02*

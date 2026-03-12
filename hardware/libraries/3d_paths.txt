@@ -1,0 +1,9 @@
+F0805:${KICAD9_3DMODEL_DIR}/Fuse.3dshapes/Fuse_0805_2012Metric.step
+C0603:${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step
+SOT-23:${KICAD9_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step
+R0603:${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step
+SOIC16-1.27-10X3.9MM:${KICAD9_3DMODEL_DIR}/Package_SO.3dshapes/SOIC-16W_5.3x10.2mm_P1.27mm.step
+C0805:${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step
+SOT323:${KICAD9_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-323_SC-70.step
+LED0603:${KICAD9_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step
+PINSOCKET-16:${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x16_P2.54mm_Vertical.step

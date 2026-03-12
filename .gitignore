@@ -11,3 +11,31 @@ esp32/Schematics/load-cell-amplifier/load-cell-amplifier.kicad_prl
 esp32/Schematics/load-cell-amplifier/load-cell-amplifier-backups/load-cell-amplifier-2026-02-10_123804.zip
 esp32/Schematics/load-cell-amplifier/load-cell-amplifier-backups/load-cell-amplifier-2026-02-17_100507.zip
 esp32/Schematics/load-cell-amplifier/fp-info-cache
+
+# Hardware
+# -----------------------------------------------
+# Automatically generated backup files from KiCad
+# -----------------------------------------------
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.sch-bak
+*-save.pro
+*-save.kicad_pcb
+/*-backups/
+
+# -----------------------------------------------
+# Temp and cache files
+# -----------------------------------------------
+*.000
+*.tmp
+*.log
+*.raw
+*~
+~*
+_autosave-*
+\#auto_saved_files\#
+fp-info-cache
+*.kicad_prl
+/build

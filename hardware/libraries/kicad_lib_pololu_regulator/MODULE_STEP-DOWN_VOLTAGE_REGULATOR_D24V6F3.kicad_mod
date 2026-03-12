@@ -1,0 +1,145 @@
+(footprint "MODULE_STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at -0.77 -9.23 0)
+		(layer "F.SilkS")
+		(uuid "c20fdda3-4493-45a8-87d0-7bf6e1f7893d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "MODULE_STEP-DOWN_VOLTAGE_REGULATOR_D24V6F3"
+		(at 20.705 9.4892 0)
+		(layer "F.Fab")
+		(uuid "2e63f7eb-7c99-4009-9c32-0deec53d700d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at -0.635 1.8542 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ca0ea168-8086-4dd9-b072-9f675c87896c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at -0.635 1.8542 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ee740b09-298d-4352-8ca4-3338c6e995a2")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_rect
+		(start -5.715 -8.255)
+		(end 5.715 8.255)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "837c7647-f92e-4183-9b46-e06f1e8bf5e9")
+	)
+	(fp_rect
+		(start -5.97 -8.51)
+		(end 5.98 8.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "88ac09f6-21ea-4a7a-8935-5c10c6b95c1f")
+	)
+	(pad "!SHDN" thru_hole circle
+		(at 3.81 6.985)
+		(size 1.53 1.53)
+		(drill 1.02)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(solder_mask_margin 0.102)
+		(uuid "1b191fe9-3cec-4e6d-8182-164b283a68f3")
+	)
+	(pad "GND" thru_hole rect
+		(at -1.27 6.985)
+		(size 1.53 1.53)
+		(drill 1.02)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(solder_mask_margin 0.102)
+		(uuid "a3ac8cf2-1e56-4b0d-b271-b0f5a3d27d97")
+	)
+	(pad "VIN" thru_hole circle
+		(at 1.27 6.985)
+		(size 1.53 1.53)
+		(drill 1.02)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(solder_mask_margin 0.102)
+		(uuid "47aa7350-b55b-4cdc-a2b0-25dde083aeff")
+	)
+	(pad "VOUT" thru_hole circle
+		(at -3.81 6.985)
+		(size 1.53 1.53)
+		(drill 1.02)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(solder_mask_margin 0.102)
+		(uuid "a5d05484-d218-4125-91fc-56d6fd421851")
+	)
+	(embedded_fonts no)
+	(model "C:/Labs/IoT/Open-Ruche-Monitoring/hardware/libraries/kicad_lib_pololu_regulator/pololu-step-up-step-down-voltage-regulator-s7v8fx.step"
+		(offset
+			(xyz -5.75 -8.25 11)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
+	(model "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.step"
+		(offset
+			(xyz 3.79 -7 11)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -180 90)
+		)
+	)
+	(model "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x04_P2.54mm_Vertical.step"
+		(offset
+			(xyz -3.75 -7 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -90)
+		)
+	)
+)
