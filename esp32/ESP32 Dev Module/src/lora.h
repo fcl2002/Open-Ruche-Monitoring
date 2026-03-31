@@ -32,7 +32,7 @@ struct LoRaCalibration {
 };
 
 // Initialise UART to the LoRa-E5 module, restore NVS calibration, and
-// start OTAA join.  Call once from setup().
+// start OTAA join.
 void lora_init();
 
 // Process all incoming LoRa-E5 serial bytes and forward Serial monitor
@@ -46,6 +46,10 @@ bool lora_should_send();
 // Serialise the payload to a hex string and fire AT+CMSGHEX.
 // Resets the internal send timer.  Call only when lora_should_send() == true.
 void lora_send(const SensorPayload& payload);
+
+// Put LoRa-E5 in low-power sleep mode (AT+SLEEP).
+// Call this right before the ESP32 enters deep sleep.
+void lora_sleep();
 
 // Current calibration values (updated live by downlink commands).
 const LoRaCalibration& lora_calibration();

@@ -11,15 +11,29 @@
 #define CONFIG_H
 
 // ── Deep sleep ────────────────────────────────────────────────
-#define DEEP_SLEEP_DURATION_S   5
+#define DEEP_SLEEP_DURATION_S   10      // Normal cycle: 15 s between uplinks
+#define DEEP_SLEEP_DORMANT_S    1800    // Dormant mode: 30 min between checks
 #define uS_TO_S_FACTOR          1000000
+
+// ── Activity thresholds ───────────────────────────────────────
+// Both conditions must be true to enter the active (uplink) cycle.
+// Below either threshold the system stays in dormant deep sleep.
+#define LUX_ACTIVITY_THRESHOLD   1000   // lux  — minimum daylight level
+#define TEMP_ACTIVITY_THRESHOLD  120    // °C×10 — 12.0 °C minimum
+
+// ── Battery ADC ───────────────────────────────────────────────
+#define BATTERY_ADC_PIN         35          // ADC1_CH7 — battery voltage divider output
+#define BATTERY_DIVIDER_RATIO   2.0f        // (R1+R2)/R2 — adjust to your resistor values
+
+// ── Voltage regulators ───────────────────────────────────────
+#define VREG1_PIN               12          // Regulator 1 enable (HIGH = on)
+#define VREG2_PIN               13          // Regulator 2 enable (HIGH = on)
 
 // ── I2C pins ──────────────────────────────────────────────────
 #define I2C_SDA_PIN             21
 #define I2C_SCL_PIN             22
 
 // ── I2C addresses ─────────────────────────────────────────────
-#define MMA8451_ADDR            0x1C
 #define SEN0562_ADDR            0x23
 
 // ── HX711 ─────────────────────────────────────────────────────
@@ -38,13 +52,24 @@
 // ── Sensor error sentinels ────────────────────────────────────
 #define SENSOR_ERROR_VALUE      -32768
 #define SENSOR_LUX_ERROR_VALUE  0
-#define ACCEL_ERROR_VALUE       -32768
+
+// ── Microphone AI board UART (UART1 hardware) ────────────────
+#define AI_RX_PIN           14          // ESP32 GPIO receiving microphone AI TX
+#define AI_UART_NUM         1           // HardwareSerial index (UART1)
+#define AI_BAUD             9600
+#define AI_READ_TIMEOUT_MS  500
+
+// ── Camera AI board UART (SoftwareSerial — HW UARTs exhausted) ─
+// UART0=USB, UART1=microphone, UART2=LoRa → no HW UART left.
+#define CAM_RX_PIN          25          // ESP32 GPIO receiving camera AI TX
+#define CAM_BAUD            115200
+#define CAM_READ_TIMEOUT_MS 500
 
 // ── LoRa-E5 UART ─────────────────────────────────────────────
 #define LORA_RX_PIN              16          // ESP32 GPIO connected to LoRa-E5 TX
 #define LORA_TX_PIN              17          // ESP32 GPIO connected to LoRa-E5 RX
 #define LORA_SERIAL_NUM          2           // ESP32 HardwareSerial index
-#define LORA_DEFAULT_INTERVAL_MS 5000UL     // Default uplink interval (30 s)
+#define LORA_DEFAULT_INTERVAL_MS 15000UL      // Default uplink interval (30 s)
 
 // ── TTN OTAA credentials ─────────────────────────────────────
 #define LORA_DEV_EUI  "70B3D57ED0075CEE"

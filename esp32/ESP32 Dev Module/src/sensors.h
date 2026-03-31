@@ -17,7 +17,6 @@
 #include <DallasTemperature.h>
 #include "config.h"
 #include "errors.h"
-#include "mma8451.h"
 
 // Error values for sensors — defined in config.h
 
@@ -51,5 +50,8 @@ int16_t read_ds18b20_sonde(DeviceAddress sensor, const char* sensorName);
 
 // returns the luminosity outside the hive reading from SEN0562 sensor
 uint16_t read_sen0562();
+
+// returns battery voltage as uint8_t (V * 10), e.g. 42 = 4.2 V
+uint8_t read_battery_v();
 
 #endif /* SENSORS_h */

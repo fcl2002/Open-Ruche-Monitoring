@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "sensors.h"
-#include "mma8451.h"
 
 HX711 hx711;
 
@@ -13,12 +12,30 @@ DeviceAddress sonde1 = {0x28, 0x4C, 0xB5, 0x68, 0x10, 0x00, 0x00, 0x4D}; //fil o
 DeviceAddress sonde2 = {0x28, 0x33, 0xBA, 0x69, 0x10, 0x00, 0x00, 0x11};
 
 void sensors_init(void) {
+    // Initialize I2C bus for all I2C sensors (SEN0562, etc.).
+    Serial.println("[DEBUG] Wire.begin...");
+    Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
+
+    // I2C bus scan
+    Serial.println("[DEBUG] I2C scan:");
+    int found = 0;
+    for (uint8_t addr = 1; addr < 127; addr++) {
+        Wire.beginTransmission(addr);
+        if (Wire.endTransmission() == 0) {
+            Serial.printf("[DEBUG]   device at 0x%02X\n", addr);
+            found++;
+        }
+    }
+    if (found == 0) Serial.println("[DEBUG]   no I2C devices found");
+
+    Serial.println("[DEBUG] hx711_init...");
     hx711_init();
+    Serial.println("[DEBUG] DHT begin...");
 	external_dht.begin();
 	internal_dht.begin();
     logInfo("DHT22 sensors initialized", "SETUP");
+    Serial.println("[DEBUG] sondes_init...");
     sondes_init();
-    init_mma8451();
 }
 
 void hx711_init(void) {
@@ -33,16 +50,23 @@ void hx711_init(void) {
 void sondes_init(void) {
     sondes.begin();
     int deviceCount = sondes.getDeviceCount();
-    
-    if (deviceCount > 0)
+    Serial.printf("[DEBUG] DS18B20 devices found on bus: %d\n", deviceCount);
+
+    if (deviceCount > 0) {
         sondes.getAddress(sonde1, 0);
-    else
+        Serial.printf("[DEBUG] Sonde 1 addr: %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X\n",
+            sonde1[0],sonde1[1],sonde1[2],sonde1[3],sonde1[4],sonde1[5],sonde1[6],sonde1[7]);
+    } else {
         logError(ERR_DEVICE_NOT_FOUND, "DS18B20 Sonde 1");
-    
-    if (deviceCount > 1)
+    }
+
+    if (deviceCount > 1) {
         sondes.getAddress(sonde2, 1);
-    else if (deviceCount == 1)
+        Serial.printf("[DEBUG] Sonde 2 addr: %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X\n",
+            sonde2[0],sonde2[1],sonde2[2],sonde2[3],sonde2[4],sonde2[5],sonde2[6],sonde2[7]);
+    } else if (deviceCount == 1) {
         logError(ERR_DEVICE_NOT_FOUND, "DS18B20 Sonde 2");
+    }
 
     if (deviceCount > 0)
         logInfo("DS18B20 sensors initialized", "SETUP");
@@ -85,6 +109,19 @@ int16_t read_ds18b20_sonde(DeviceAddress sensorAddr, const char* sensorName) {
         logError(ERR_DEVICE_NOT_FOUND, sensorName);
         return SENSOR_ERROR_VALUE;
     }
+}
+
+uint8_t read_battery_v() {
+    analogSetAttenuation(ADC_11db);  // input range 0–3.6 V
+    // Average 10 samples to reduce ADC noise
+    int sum = 0;
+    for (int n = 0; n < 10; n++) sum += analogRead(BATTERY_ADC_PIN);
+    float adc_v  = (sum / 10.0f / 4095.0f) * 3.6f;
+    float batt_v = adc_v * BATTERY_DIVIDER_RATIO;
+    // 0 V = 0%, 4.2 V = 100%
+    float pct = (batt_v / 4.2f) * 100.0f;
+    if (pct > 100.0f) pct = 100.0f;
+    return (uint8_t)pct;
 }
 
 uint16_t read_sen0562() {

@@ -21,6 +21,7 @@ static Preferences    prefs;
 static LoRaCalibration cal;
 static bool            joined     = false;
 static unsigned long   lastSendMs = 0;
+static bool            joinLogged  = false;
 
 // ─── NVS helpers ──────────────────────────────────────────────────────────────
 
@@ -49,7 +50,17 @@ static void save_tare() {
 // ─── AT command helper ────────────────────────────────────────────────────────
 
 static void send_at(const String& cmd) {
-    logInfo(("AT >> " + cmd).c_str(), "LORA");
+    if (cmd.startsWith("AT+JOIN")) {
+        logInfo("TX: Join request sent", "LORA");
+    } else if (cmd.startsWith("AT+CMSGHEX")) {
+        logInfo("TX: Uplink frame sent", "LORA");
+    } else if (cmd.startsWith("AT+MODE")) {
+        logInfo("TX: LoRaWAN mode configured", "LORA");
+    } else if (cmd.startsWith("AT+SLEEP")) {
+        logInfo("TX: Sleep command sent", "LORA");
+    } else {
+        logInfo("TX: Command sent", "LORA");
+    }
     loraSerial.println(cmd);
 }
 
@@ -106,22 +117,15 @@ static void handle_downlink(const String& line) {
 void lora_init() {
     load_calibration();
 
-    char nvsmsg[96];
-    snprintf(nvsmsg, sizeof(nvsmsg),
-             "NVS: interval=%lums tempOff=%.1fC humOff=%d%% tare=%ld",
-             (unsigned long)cal.sendInterval, cal.tempOffset / 10.0f,
-             (int)cal.humOffset, (long)cal.tareWeight);
-    logInfo(nvsmsg, "LORA");
+    logInfo("LoRa init started", "LORA");
 
     loraSerial.begin(9600, SERIAL_8N1, LORA_RX_PIN, LORA_TX_PIN);
     vTaskDelay(1000);
+    logInfo("Serial link ready", "LORA");
 
-    send_at("AT+ID=AppEui, \"" LORA_APP_EUI "\""); vTaskDelay(500);
-    send_at("AT+ID=DevEui, \"" LORA_DEV_EUI "\""); vTaskDelay(500);
-    send_at("AT+KEY=APPKEY, \"" LORA_APP_KEY "\""); vTaskDelay(500);
-    send_at("AT+MODE=LWOTAA");                       vTaskDelay(500);
+    send_at("AT+MODE=LWOTAA"); vTaskDelay(500);
 
-    logInfo("Requesting OTAA join...", "LORA");
+    logInfo("Join procedure started", "LORA");
     send_at("AT+JOIN");
 }
 
@@ -132,13 +136,20 @@ void lora_tick() {
         line.trim();
         if (line.length() == 0) continue;
 
-        logInfo(("RX << " + line).c_str(), "LORA");
+        if (!joinLogged && (line.indexOf("Join") >= 0 || line.indexOf("JOIN") >= 0)) {
+            logInfo("RX: Join status update", "LORA");
+            joinLogged = true;
+        }
+
+        if (line.indexOf("ERROR") >= 0 || line.indexOf("Error") >= 0 || line.indexOf("error") >= 0) {
+            logWarn("RX: Module reported an error", "LORA");
+        }
 
         if (!joined && (line.indexOf("Network joined") >= 0 ||
                         line.indexOf("Already joined") >= 0)) {
             joined = true;
             lastSendMs = millis() - cal.sendInterval; // trigger uplink immediately
-            logInfo("Network joined! Ready to uplink.", "LORA");
+            logInfo("Join successful. Uplink ready", "LORA");
         }
 
         if (line.indexOf("RX:") >= 0) {
@@ -168,8 +179,14 @@ void lora_send(const SensorPayload& payload) {
         hexPayload += buf;
     }
 
-    logInfo(("Uplink (" + String(sizeof(SensorPayload)) + " bytes): " + hexPayload).c_str(), "LORA");
+    logInfo(("Uplink prepared (" + String(sizeof(SensorPayload)) + " bytes)").c_str(), "LORA");
     send_at("AT+CMSGHEX=\"" + hexPayload + "\"");
+}
+
+void lora_sleep() {
+    logInfo("Sleep procedure started", "LORA");
+    send_at("AT+SLEEP");
+    delay(50);
 }
 
 const LoRaCalibration& lora_calibration() {
