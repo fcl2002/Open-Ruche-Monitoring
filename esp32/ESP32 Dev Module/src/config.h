@@ -22,8 +22,10 @@
 #define TEMP_ACTIVITY_THRESHOLD  120    // °C×10 — 12.0 °C minimum
 
 // ── Battery ADC ───────────────────────────────────────────────
-#define BATTERY_ADC_PIN         35          // ADC1_CH7 — battery voltage divider output
-#define BATTERY_DIVIDER_RATIO   2.0f        // (R1+R2)/R2 — adjust to your resistor values
+#define BATTERY_ADC_PIN         35          // ADC1_CH7 — battery voltage sense (V_BAT = 1.435 * raw/4095 * 3.3)
+
+// ── Buzzer ────────────────────────────────────────────────────
+#define BUZZER_PIN              19          // Active buzzer enable (HIGH = on)
 
 // ── Voltage regulators ───────────────────────────────────────
 #define VREG1_PIN               12          // Regulator 1 enable (HIGH = on)

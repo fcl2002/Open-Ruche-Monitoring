@@ -37,6 +37,7 @@ void setup() {
     Serial.println("\n----------------------");
     Serial.println(String(bootCount) + "th Boot");
 
+    buzzer_boot_beep();
     sleep_gpio_release();
     vreg_power_on();
     Serial.println("[DEBUG] VREGs ON — waiting 750ms for sensors to stabilize...");
@@ -171,6 +172,9 @@ void loop() {
 
 }
 
+// --- TESTE SONDAS ---
+
+// #include "sleep.h"
 // #include <OneWire.h>
 // #include <DallasTemperature.h>
 
@@ -179,6 +183,7 @@ void loop() {
 
 // void setup() {
 //     Serial.begin(115200);
+//     vreg_power_on();
 //     delay(200);
 //     testSondes.begin();
 //     Serial.printf("DS18B20 devices found: %d\n", testSondes.getDeviceCount());
@@ -194,3 +199,53 @@ void loop() {
 //     Serial.println("---");
 //     delay(2000);
 // }
+
+// --- TESTE LUX (SEN0562 / BH1750) ---
+
+// #include <Arduino.h>
+// #include <Wire.h>
+// #include "config.h"
+// #include "sleep.h"
+
+// void setup() {
+//     Serial.begin(115200);
+//     delay(200);
+
+//     pinMode(VREG1_PIN, OUTPUT);
+//     digitalWrite(VREG1_PIN, HIGH);
+//     Serial.println("VREG1 (sensors) ON — waiting 750ms...");
+//     delay(750);
+
+//     Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
+
+//     // Send measurement command to BH1750
+//     Wire.beginTransmission(SEN0562_ADDR);
+//     Wire.write(0x10);  // Continuously H-Resolution Mode
+//     Wire.endTransmission();
+//     Serial.println("BH1750 init done");
+// }
+
+// void loop() {
+//     Wire.beginTransmission(SEN0562_ADDR);
+//     Wire.write(0x10);
+//     byte err = Wire.endTransmission();
+//     if (err != 0) {
+//         Serial.printf("I2C error: %d — check wiring\n", err);
+//         delay(2000);
+//         return;
+//     }
+
+//     delay(180);  // BH1750 measurement time
+
+//     Wire.requestFrom(SEN0562_ADDR, (uint8_t)2);
+//     if (Wire.available() < 2) {
+//         Serial.println("No data from BH1750");
+//     } else {
+//         uint16_t raw = (Wire.read() << 8) | Wire.read();
+//         uint16_t lux = (uint16_t)(raw / 1.2f);
+//         Serial.printf("Lux: %u\n", lux);
+//     }
+//     Serial.println("---");
+//     delay(2000);
+// }
+

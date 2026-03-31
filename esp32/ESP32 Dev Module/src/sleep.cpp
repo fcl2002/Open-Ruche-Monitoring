@@ -24,6 +24,16 @@ void sleep_gpio_release() {
     gpio_hold_dis((gpio_num_t)VREG2_PIN);
 }
 
+void buzzer_boot_beep() {
+    pinMode(BUZZER_PIN, OUTPUT);
+    for (int i = 0; i < 3; i++) {
+        digitalWrite(BUZZER_PIN, HIGH);
+        delay(100);
+        digitalWrite(BUZZER_PIN, LOW);
+        delay(100);
+    }
+}
+
 void vreg_power_on() {
     pinMode(VREG1_PIN, OUTPUT);
     pinMode(VREG2_PIN, OUTPUT);

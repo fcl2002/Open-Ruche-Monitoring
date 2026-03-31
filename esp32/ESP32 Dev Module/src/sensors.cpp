@@ -112,12 +112,12 @@ int16_t read_ds18b20_sonde(DeviceAddress sensorAddr, const char* sensorName) {
 }
 
 uint8_t read_battery_v() {
-    analogSetAttenuation(ADC_11db);  // input range 0–3.6 V
+    pinMode(BATTERY_ADC_PIN, INPUT);
     // Average 10 samples to reduce ADC noise
     int sum = 0;
     for (int n = 0; n < 10; n++) sum += analogRead(BATTERY_ADC_PIN);
-    float adc_v  = (sum / 10.0f / 4095.0f) * 3.6f;
-    float batt_v = adc_v * BATTERY_DIVIDER_RATIO;
+    float raw    = sum / 10.0f;
+    float batt_v = 1.435f * (raw / 4095.0f) * 3.3f;
     // 0 V = 0%, 4.2 V = 100%
     float pct = (batt_v / 4.2f) * 100.0f;
     if (pct > 100.0f) pct = 100.0f;

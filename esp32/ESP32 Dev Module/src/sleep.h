@@ -21,6 +21,9 @@ void sleep_gpio_release();
 // Enable voltage regulators (GPIO 12 & 13 HIGH) — call right after sleep_gpio_release()
 void vreg_power_on();
 
+// Emit N short beeps on the buzzer to signal system boot
+void buzzer_boot_beep();
+
 // Enter deep sleep for the given number of seconds (does not return).
 // Use DEEP_SLEEP_DURATION_S for normal cycles and DEEP_SLEEP_DORMANT_S
 // for dormant (night/cold) mode.
