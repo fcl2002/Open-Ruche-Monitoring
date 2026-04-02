@@ -5,7 +5,7 @@
 
 // Initialise UART1 to receive hive state from the AI board.
 // Call once in setup() before read_audio().
-void hive_ai_init(void);
+void boards_init(void);
 
 // Read the hive state sent by the microphone AI board over UART.
 // Blocks for up to AI_READ_TIMEOUT_MS waiting for a byte.

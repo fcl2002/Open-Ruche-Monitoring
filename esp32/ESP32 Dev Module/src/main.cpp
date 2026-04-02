@@ -53,7 +53,7 @@ void setup() {
     Serial.println("[DEBUG] Starting sensors_init...");
     sensors_init();
     Serial.println("[DEBUG] sensors_init done");
-    hive_ai_init();
+    boards_init();
 
     // Quick environmental check 
     // Read only luminosity and external temperature — cheap reads
@@ -155,13 +155,6 @@ void setup() {
     payload.battery_v = read_battery_v();
 
     lora_send(payload);
-
-    // Print hive_ai value to terminal
-    Serial.print("audio value: ");
-    Serial.println(payload.audio);
-
-    Serial.print("camera value: ");
-    Serial.println(payload.camera);
 
     // Listen for Class A downlink windows before sleeping
     deadline = millis() + 5000;

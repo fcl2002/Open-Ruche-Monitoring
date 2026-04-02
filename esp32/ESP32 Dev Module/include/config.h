@@ -11,7 +11,7 @@
 #define CONFIG_H
 
 // ── Deep sleep ────────────────────────────────────────────────
-#define DEEP_SLEEP_DURATION_S   10      // Normal cycle: 15 s between uplinks
+#define DEEP_SLEEP_DURATION_S   10      // Normal cycle: sleep and wake interval (seconds)
 #define DEEP_SLEEP_DORMANT_S    1800    // Dormant mode: 30 min between checks
 #define uS_TO_S_FACTOR          1000000
 #define AI_READ_TIME            10000   // AI Boards read time
@@ -72,7 +72,7 @@
 #define LORA_RX_PIN              16          // ESP32 GPIO connected to LoRa-E5 TX
 #define LORA_TX_PIN              17          // ESP32 GPIO connected to LoRa-E5 RX
 #define LORA_SERIAL_NUM          2           // ESP32 HardwareSerial index
-#define LORA_DEFAULT_INTERVAL_MS 15000UL      // Default uplink interval (30 s)
+#define LORA_DEFAULT_INTERVAL_MS (DEEP_SLEEP_DURATION_S * 1000UL)  // Synchronized with ESP wake cycle
 
 // ── TTN OTAA credentials ─────────────────────────────────────
 #define LORA_DEV_EUI  "70B3D57ED0075CEE"

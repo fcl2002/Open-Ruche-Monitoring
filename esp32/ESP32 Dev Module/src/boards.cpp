@@ -10,7 +10,7 @@ static HardwareSerial micSerial(AI_UART_NUM);
 // SoftwareSerial — camera AI board (no HW UART left: UART0=USB, UART1=mic, UART2=LoRa)
 static SoftwareSerial camSerial(CAM_RX_PIN, -1);  // RX only
 
-void hive_ai_init(void) {
+void boards_init(void) {
     micSerial.begin(AI_BAUD, SERIAL_8N1, AI_RX_PIN, -1);
     logInfo("Microphone UART ready", "MIC");
 

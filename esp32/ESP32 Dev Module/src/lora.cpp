@@ -17,12 +17,12 @@
 #include <string.h>
 
 static HardwareSerial loraSerial(LORA_SERIAL_NUM);
-static Preferences    prefs;
+static Preferences prefs;
 
 static LoRaCalibration cal;
-static bool            joined    = false;
+static bool joined = false;
 static unsigned long   lastSendMs = 0;
-static bool            joinLogged = false;
+static bool joinLogged = false;  // Suppress duplicate join status logs after first occurrence
 
 // ─── NVS helpers ──────────────────────────────────────────────────────────────
 
@@ -51,10 +51,10 @@ static void save_tare() {
 // ─── AT command helper ────────────────────────────────────────────────────────
 
 static void send_at(const String& cmd) {
-    if      (cmd.startsWith("AT+JOIN"))    logInfo("TX: Join request sent",      "LORA");
-    else if (cmd.startsWith("AT+CMSGHEX")) logInfo("TX: Uplink frame sent",      "LORA");
-    else if (cmd.startsWith("AT+MODE"))    logInfo("TX: LoRaWAN mode configured","LORA");
-    else                                   logInfo("TX: Command sent",            "LORA");
+    if (cmd.startsWith("AT+JOIN")) logInfo("TX: Join request sent", "LORA");
+    else if (cmd.startsWith("AT+CMSGHEX")) logInfo("TX: Uplink frame sent", "LORA");
+    else if (cmd.startsWith("AT+MODE")) logInfo("TX: LoRaWAN mode configured","LORA");
+    else logInfo("TX: Command sent", "LORA");
     loraSerial.println(cmd);
 }
 
@@ -107,10 +107,12 @@ static void handle_downlink(const String& line) {
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
-void lora_emergency_reset() {
-    logInfo("Tentando despertar forçado...", "LORA");
+void lora_init() {
+    loraSerial.begin(9600, SERIAL_8N1, LORA_RX_PIN, LORA_TX_PIN);
+    vTaskDelay(1000);
+    logInfo("Serial link ready", "LORA");
 
-    // Datasheet: 4xFF devem vir imediatamente antes do comando AT+LOWPOWER=AUTOOFF.
+    // Datasheet: 4xFF bytes must immediately precede AT+LOWPOWER=AUTOOFF command
     const char cmd[] = "AT+LOWPOWER=AUTOOFF\r\n";
     uint8_t frame[4 + sizeof(cmd) - 1];
     frame[0] = 0xFF;
@@ -122,22 +124,14 @@ void lora_emergency_reset() {
     loraSerial.write(frame, sizeof(frame));
     loraSerial.flush();
     
-    // Aguarda confirmação
+    // Wait for response confirmation
     unsigned long timeout = millis() + 1000;
     while(millis() < timeout) {
         if(loraSerial.available()) {
-            Serial.print("[EMERGENCIA] ");
-            Serial.println(loraSerial.readString());
+            logInfo(loraSerial.readString().c_str(), "LORA");
         }
-    }
-}
-
-void lora_init() {
-    loraSerial.begin(9600, SERIAL_8N1, LORA_RX_PIN, LORA_TX_PIN);
-    vTaskDelay(1000);
-    logInfo("Serial link ready", "LORA");
-
-    lora_emergency_reset();
+    }    
+    
     load_calibration();
 
     logInfo("LoRa init started", "LORA");
@@ -155,6 +149,7 @@ void lora_tick() {
 
         Serial.println("[LORA RX] " + line);
 
+        // Log join status update once to avoid spam from repeated module responses
         if (!joinLogged && (line.indexOf("Join") >= 0 || line.indexOf("JOIN") >= 0)) {
             logInfo("RX: Join status update", "LORA");
             joinLogged = true;
@@ -203,7 +198,7 @@ void lora_send(const SensorPayload& payload) {
 
 void lora_sleep() {
     logInfo("Sleep procedure started", "LORA");
-    send_at("AT+LOWPOWER=AUTOON\r\n");
+    send_at("AT+LOWPOWER=AUTOON");
     delay(500);
 }
 
