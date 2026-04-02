@@ -6,7 +6,7 @@
 #include "payload.h"
 #include "sleep.h"
 #include "lora.h"
-#include "hive_ai.h"
+#include "boards.h"
 
 RTC_DATA_ATTR int bootCount = 0;
 
@@ -18,8 +18,7 @@ RTC_DATA_ATTR int bootCount = 0;
 // If either is below threshold the system is in dormant mode and
 // goes back to deep sleep without joining LoRa or reading all sensors.
 static bool is_active_period(uint16_t lux, int16_t ext_temp_x10) {
-    return (lux      >= LUX_ACTIVITY_THRESHOLD) &&
-           (ext_temp_x10 >= TEMP_ACTIVITY_THRESHOLD);
+    return (lux >= LUX_ACTIVITY_THRESHOLD) && (ext_temp_x10 >= TEMP_ACTIVITY_THRESHOLD);
 }
 
 static void shutdown_and_sleep(uint32_t duration_s) {
@@ -39,9 +38,12 @@ void setup() {
 
     buzzer_boot_beep();
     sleep_gpio_release();
-    vreg_power_on();
-    Serial.println("[DEBUG] VREGs ON — waiting 750ms for sensors to stabilize...");
-    delay(750);  // DS18B20 + I2C sensors need time after power-on
+
+    pinMode(VREG_3V3_PIN, OUTPUT);
+    digitalWrite(VREG_3V3_PIN, HIGH);
+    logInfo("Voltage regulator 3.3v ON", "SLEEP");
+
+    delay(2000);
 
     setLogLevel(LOG_INFO);
     print_wakeup_reason();
@@ -53,19 +55,17 @@ void setup() {
     Serial.println("[DEBUG] sensors_init done");
     hive_ai_init();
 
-    // ── Quick environmental check ──────────────────────────────
+    // Quick environmental check 
     // Read only luminosity and external temperature — cheap reads
     // that decide whether conditions are suitable for a full cycle.
     // This avoids waking the LoRa module and reading all sensors
     // during the night or in cold weather.
-    uint16_t    lux      = read_sen0562();
-    DHT22Result ext      = read_dht22(external_dht, "External DHT22");
-    int16_t     ext_temp = ext.temperature;  // °C × 10
+    uint16_t lux = read_sen0562();
+    DHT22Result ext = read_dht22(external_dht, "External DHT22");
+    int16_t ext_temp = ext.temperature;  // °C × 10
 
     char check_msg[80];
-    snprintf(check_msg, sizeof(check_msg),
-             "Quick check — lux=%u, ext_temp=%.1f C",
-             lux, ext_temp / 10.0f);
+    snprintf(check_msg, sizeof(check_msg), "Climate conditions — lux=%u, ext_temp=%.1f C", lux, ext_temp / 10.0f);
     logInfo(check_msg, "SYSTEM");
 
     // if (!is_active_period(lux, ext_temp)) {
@@ -80,7 +80,7 @@ void setup() {
     //     return;
     // }
 
-    // ── Active mode — full uplink cycle ───────────────────────
+    // ── Active mode — full uplink cycle
     logInfo("Active period confirmed — starting uplink cycle", "SYSTEM");
 
     lora_init();
@@ -106,14 +106,14 @@ void setup() {
     SensorPayload payload = {0};
 
     // External DHT22 — reuse the reading already taken in the quick check
-    payload.ext_humidity    = (int8_t)constrain(ext.humidity + cal.humOffset, 0, 100);
+    payload.ext_humidity = (int8_t)constrain(ext.humidity + cal.humOffset, 0, 100);
     payload.ext_temperature = (ext_temp != SENSOR_ERROR_VALUE)
                                   ? ext_temp + cal.tempOffset
                                   : (int16_t)SENSOR_ERROR_VALUE;
 
     // Internal DHT22 — apply humidity and temperature offsets
     DHT22Result intr = read_dht22(internal_dht, "Internal DHT22");
-    payload.int_humidity    = (int8_t)constrain(intr.humidity + cal.humOffset, 0, 100);
+    payload.int_humidity = (int8_t)constrain(intr.humidity + cal.humOffset, 0, 100);
     payload.int_temperature = (intr.temperature != SENSOR_ERROR_VALUE)
                                   ? intr.temperature + cal.tempOffset
                                   : (int16_t)SENSOR_ERROR_VALUE;
@@ -129,35 +129,39 @@ void setup() {
                                      ? s2 + cal.tempOffset
                                      : (int16_t)SENSOR_ERROR_VALUE;
 
-    // Luminosity — reuse the reading already taken in the quick check
+    // Luminosity
     payload.lux = lux;
 
     // Weight: net weight after tare (g*100)
     payload.weight = read_hx711();
 
-    // Microphone AI classifier via UART1
-    payload.hive_status = read_microphone();
+    digitalWrite(VREG_3V3_PIN, LOW);
+    logInfo("Voltage regulator 3.3V OFF", "SLEEP");
 
-    // Camera AI classifier via SoftwareSerial (GPIO25)
-    payload.camera_status = read_camera();
+    pinMode(VREG_5V_PIN, OUTPUT);
+    digitalWrite(VREG_5V_PIN, HIGH);
+    logInfo("Voltage regulator 5V ON", "SLEEP");
+
+    deadline = millis() + AI_READ_TIME;
+    while (millis() < deadline) {
+        payload.audio = read_audio();
+        payload.camera = read_camera();
+    }
+
+    digitalWrite(VREG_5V_PIN, LOW);
+    logInfo("Voltage regulator 5V OFF", "SLEEP");
 
     // Battery voltage via ADC (GPIO35)
     payload.battery_v = read_battery_v();
-    Serial.printf("Battery: %d%%\n", payload.battery_v);
-
-    Serial.printf("Sonde 1: %.1f C\n", payload.sonde1_temperature / 10.0f);
-    Serial.printf("Sonde 2: %.1f C\n", payload.sonde2_temperature / 10.0f);
 
     lora_send(payload);
 
     // Print hive_ai value to terminal
-    Serial.print("hive_ai value: ");
-    Serial.println(payload.hive_status);
+    Serial.print("audio value: ");
+    Serial.println(payload.audio);
 
     Serial.print("camera value: ");
-    Serial.println(payload.camera_status);
-   
-    Serial.printf("Lux: %u\n", payload.lux);
+    Serial.println(payload.camera);
 
     // Listen for Class A downlink windows before sleeping
     deadline = millis() + 5000;
@@ -171,81 +175,3 @@ void setup() {
 void loop() {
 
 }
-
-// --- TESTE SONDAS ---
-
-// #include "sleep.h"
-// #include <OneWire.h>
-// #include <DallasTemperature.h>
-
-// OneWire testWire(ONE_WIRE_BUS);
-// DallasTemperature testSondes(&testWire);
-
-// void setup() {
-//     Serial.begin(115200);
-//     vreg_power_on();
-//     delay(200);
-//     testSondes.begin();
-//     Serial.printf("DS18B20 devices found: %d\n", testSondes.getDeviceCount());
-// }
-
-// void loop() {
-//     testSondes.requestTemperatures();
-//     int n = testSondes.getDeviceCount();
-//     for (int i = 0; i < n; i++) {
-//         Serial.printf("Sonde [%d]: %.1f C\n", i, testSondes.getTempCByIndex(i));
-//     }
-//     if (n == 0) Serial.println("No devices found — check wiring");
-//     Serial.println("---");
-//     delay(2000);
-// }
-
-// --- TESTE LUX (SEN0562 / BH1750) ---
-
-// #include <Arduino.h>
-// #include <Wire.h>
-// #include "config.h"
-// #include "sleep.h"
-
-// void setup() {
-//     Serial.begin(115200);
-//     delay(200);
-
-//     pinMode(VREG1_PIN, OUTPUT);
-//     digitalWrite(VREG1_PIN, HIGH);
-//     Serial.println("VREG1 (sensors) ON — waiting 750ms...");
-//     delay(750);
-
-//     Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
-
-//     // Send measurement command to BH1750
-//     Wire.beginTransmission(SEN0562_ADDR);
-//     Wire.write(0x10);  // Continuously H-Resolution Mode
-//     Wire.endTransmission();
-//     Serial.println("BH1750 init done");
-// }
-
-// void loop() {
-//     Wire.beginTransmission(SEN0562_ADDR);
-//     Wire.write(0x10);
-//     byte err = Wire.endTransmission();
-//     if (err != 0) {
-//         Serial.printf("I2C error: %d — check wiring\n", err);
-//         delay(2000);
-//         return;
-//     }
-
-//     delay(180);  // BH1750 measurement time
-
-//     Wire.requestFrom(SEN0562_ADDR, (uint8_t)2);
-//     if (Wire.available() < 2) {
-//         Serial.println("No data from BH1750");
-//     } else {
-//         uint16_t raw = (Wire.read() << 8) | Wire.read();
-//         uint16_t lux = (uint16_t)(raw / 1.2f);
-//         Serial.printf("Lux: %u\n", lux);
-//     }
-//     Serial.println("---");
-//     delay(2000);
-// }
-

@@ -14,14 +14,15 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <Preferences.h>
+#include <string.h>
 
 static HardwareSerial loraSerial(LORA_SERIAL_NUM);
 static Preferences    prefs;
 
 static LoRaCalibration cal;
-static bool            joined     = false;
+static bool            joined    = false;
 static unsigned long   lastSendMs = 0;
-static bool            joinLogged  = false;
+static bool            joinLogged = false;
 
 // ─── NVS helpers ──────────────────────────────────────────────────────────────
 
@@ -35,32 +36,25 @@ static void load_calibration() {
 }
 
 static void save_interval() {
-    prefs.begin("nbee", false); prefs.putUInt ("interval",   cal.sendInterval);  prefs.end();
+    prefs.begin("nbee", false); prefs.putUInt("interval",   cal.sendInterval); prefs.end();
 }
 static void save_temp() {
-    prefs.begin("nbee", false); prefs.putInt("tempOffset", cal.tempOffset);      prefs.end();
+    prefs.begin("nbee", false); prefs.putInt("tempOffset",  cal.tempOffset);   prefs.end();
 }
 static void save_hum() {
-    prefs.begin("nbee", false); prefs.putInt  ("humOffset",  cal.humOffset);     prefs.end();
+    prefs.begin("nbee", false); prefs.putInt("humOffset",   cal.humOffset);    prefs.end();
 }
 static void save_tare() {
-    prefs.begin("nbee", false); prefs.putInt  ("tareWeight", cal.tareWeight);    prefs.end();
+    prefs.begin("nbee", false); prefs.putInt("tareWeight",  cal.tareWeight);   prefs.end();
 }
 
 // ─── AT command helper ────────────────────────────────────────────────────────
 
 static void send_at(const String& cmd) {
-    if (cmd.startsWith("AT+JOIN")) {
-        logInfo("TX: Join request sent", "LORA");
-    } else if (cmd.startsWith("AT+CMSGHEX")) {
-        logInfo("TX: Uplink frame sent", "LORA");
-    } else if (cmd.startsWith("AT+MODE")) {
-        logInfo("TX: LoRaWAN mode configured", "LORA");
-    } else if (cmd.startsWith("AT+SLEEP")) {
-        logInfo("TX: Sleep command sent", "LORA");
-    } else {
-        logInfo("TX: Command sent", "LORA");
-    }
+    if      (cmd.startsWith("AT+JOIN"))    logInfo("TX: Join request sent",      "LORA");
+    else if (cmd.startsWith("AT+CMSGHEX")) logInfo("TX: Uplink frame sent",      "LORA");
+    else if (cmd.startsWith("AT+MODE"))    logInfo("TX: LoRaWAN mode configured","LORA");
+    else                                   logInfo("TX: Command sent",            "LORA");
     loraSerial.println(cmd);
 }
 
@@ -73,7 +67,7 @@ static void handle_downlink(const String& line) {
     int qe = line.indexOf('"', qs + 1);
     if (qs < 0 || qe <= qs) return;
 
-    String hex      = line.substring(qs + 1, qe);
+    String hex     = line.substring(qs + 1, qe);
     if (hex.length() < 4) return;
 
     String cmdType  = hex.substring(0, 2);
@@ -82,19 +76,19 @@ static void handle_downlink(const String& line) {
 
     char msg[64];
 
-    if (cmdType == "01") {                              // Change uplink interval (minutes)
+    if (cmdType == "01") {
         if (valueInt >= 1 && valueInt <= 60) {
             cal.sendInterval = (uint32_t)valueInt * 60 * 1000UL;
             save_interval();
             snprintf(msg, sizeof(msg), "Interval set to %d min", valueInt);
             logInfo(msg, "LORA");
         }
-    } else if (cmdType == "02") {                       // Temperature offset (int8, tenths of °C)
-        cal.tempOffset = (int16_t)(int8_t)valueInt;      // already in tenths of °C
+    } else if (cmdType == "02") {
+        cal.tempOffset = (int16_t)(int8_t)valueInt;
         save_temp();
         snprintf(msg, sizeof(msg), "Temp offset set to %.1f C", cal.tempOffset / 10.0f);
         logInfo(msg, "LORA");
-    } else if (cmdType == "03") {                       // Tare
+    } else if (cmdType == "03") {
         if (valueInt == 1) {
             cal.tareWeight = (int32_t)read_hx711();
             save_tare();
@@ -104,7 +98,7 @@ static void handle_downlink(const String& line) {
             save_tare();
             logInfo("Tare reset", "LORA");
         }
-    } else if (cmdType == "04") {                       // Humidity offset (%, signed)
+    } else if (cmdType == "04") {
         cal.humOffset = (int8_t)valueInt;
         save_hum();
         snprintf(msg, sizeof(msg), "Humidity offset set to %d%%", (int)cal.humOffset);
@@ -113,28 +107,53 @@ static void handle_downlink(const String& line) {
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
+void lora_emergency_reset() {
+    logInfo("Tentando despertar forçado...", "LORA");
+
+    // Datasheet: 4xFF devem vir imediatamente antes do comando AT+LOWPOWER=AUTOOFF.
+    const char cmd[] = "AT+LOWPOWER=AUTOOFF\r\n";
+    uint8_t frame[4 + sizeof(cmd) - 1];
+    frame[0] = 0xFF;
+    frame[1] = 0xFF;
+    frame[2] = 0xFF;
+    frame[3] = 0xFF;
+    memcpy(&frame[4], cmd, sizeof(cmd) - 1);
+
+    loraSerial.write(frame, sizeof(frame));
+    loraSerial.flush();
+    
+    // Aguarda confirmação
+    unsigned long timeout = millis() + 1000;
+    while(millis() < timeout) {
+        if(loraSerial.available()) {
+            Serial.print("[EMERGENCIA] ");
+            Serial.println(loraSerial.readString());
+        }
+    }
+}
 
 void lora_init() {
-    load_calibration();
-
-    logInfo("LoRa init started", "LORA");
-
     loraSerial.begin(9600, SERIAL_8N1, LORA_RX_PIN, LORA_TX_PIN);
     vTaskDelay(1000);
     logInfo("Serial link ready", "LORA");
 
-    send_at("AT+MODE=LWOTAA"); vTaskDelay(500);
+    lora_emergency_reset();
+    load_calibration();
 
+    logInfo("LoRa init started", "LORA");
+
+    send_at("AT+MODE=LWOTAA"); vTaskDelay(500);
     logInfo("Join procedure started", "LORA");
     send_at("AT+JOIN");
 }
 
 void lora_tick() {
-    // Read all incoming lines from the LoRa-E5
     while (loraSerial.available()) {
         String line = loraSerial.readStringUntil('\n');
         line.trim();
         if (line.length() == 0) continue;
+
+        Serial.println("[LORA RX] " + line);
 
         if (!joinLogged && (line.indexOf("Join") >= 0 || line.indexOf("JOIN") >= 0)) {
             logInfo("RX: Join status update", "LORA");
@@ -147,8 +166,8 @@ void lora_tick() {
 
         if (!joined && (line.indexOf("Network joined") >= 0 ||
                         line.indexOf("Already joined") >= 0)) {
-            joined = true;
-            lastSendMs = millis() - cal.sendInterval; // trigger uplink immediately
+            joined     = true;
+            lastSendMs = millis() - cal.sendInterval;
             logInfo("Join successful. Uplink ready", "LORA");
         }
 
@@ -157,7 +176,6 @@ void lora_tick() {
         }
     }
 
-    // Forward Serial-monitor input to the LoRa-E5 (manual AT commands during debug)
     while (Serial.available()) {
         loraSerial.write(Serial.read());
     }
@@ -185,8 +203,8 @@ void lora_send(const SensorPayload& payload) {
 
 void lora_sleep() {
     logInfo("Sleep procedure started", "LORA");
-    send_at("AT+SLEEP");
-    delay(50);
+    send_at("AT+LOWPOWER=AUTOON\r\n");
+    delay(500);
 }
 
 const LoRaCalibration& lora_calibration() {

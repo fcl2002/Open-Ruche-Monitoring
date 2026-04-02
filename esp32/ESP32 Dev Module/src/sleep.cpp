@@ -20,8 +20,9 @@ void print_wakeup_reason() {
 void sleep_gpio_release() {
     gpio_hold_dis((gpio_num_t)I2C_SDA_PIN);
     gpio_hold_dis((gpio_num_t)I2C_SCL_PIN);
-    gpio_hold_dis((gpio_num_t)VREG1_PIN);
-    gpio_hold_dis((gpio_num_t)VREG2_PIN);
+    gpio_hold_dis((gpio_num_t)VREG_3V3_PIN);
+    gpio_hold_dis((gpio_num_t)VREG_5V_PIN);
+    gpio_hold_dis((gpio_num_t)LORA_TX_PIN);
 }
 
 void buzzer_boot_beep() {
@@ -34,12 +35,25 @@ void buzzer_boot_beep() {
     }
 }
 
+void buzzer_sleep_beep() {
+    pinMode(BUZZER_PIN, OUTPUT);
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(500);
+    digitalWrite(BUZZER_PIN, LOW);
+}
+
 void vreg_power_on() {
-    pinMode(VREG1_PIN, OUTPUT);
-    pinMode(VREG2_PIN, OUTPUT);
-    digitalWrite(VREG1_PIN, HIGH);
-    digitalWrite(VREG2_PIN, HIGH);
+    pinMode(VREG_3V3_PIN, OUTPUT);
+    pinMode(VREG_5V_PIN, OUTPUT);
+    digitalWrite(VREG_3V3_PIN, HIGH);
+    digitalWrite(VREG_5V_PIN, HIGH);
     logInfo("Voltage regulators ON", "SLEEP");
+}
+
+void vreg_power_off() {
+    digitalWrite(VREG_3V3_PIN, LOW);
+    digitalWrite(VREG_5V_PIN, LOW);
+    logInfo("Voltage regulators OFF", "SLEEP");
 }
 
 void enter_deep_sleep(uint32_t duration_s) {
@@ -47,18 +61,16 @@ void enter_deep_sleep(uint32_t duration_s) {
     snprintf(msg, sizeof(msg), "Entering deep sleep for %lus", (unsigned long)duration_s);
     logInfo(msg, "SLEEP");
 
+    buzzer_sleep_beep();
     Serial.flush();
 
-    // Power off voltage regulators before sleep
-    digitalWrite(VREG1_PIN, LOW);
-    digitalWrite(VREG2_PIN, LOW);
-    logInfo("Voltage regulators OFF", "SLEEP");
-
     // Hold all controlled pins during deep sleep
-    gpio_hold_en((gpio_num_t)VREG1_PIN);
-    gpio_hold_en((gpio_num_t)VREG2_PIN);
+    // LORA_TX_PIN held HIGH — prevents LoRa-E5 from waking on a floating UART line
+    gpio_hold_en((gpio_num_t)VREG_3V3_PIN);
+    gpio_hold_en((gpio_num_t)VREG_5V_PIN);
     gpio_hold_en((gpio_num_t)I2C_SDA_PIN);
     gpio_hold_en((gpio_num_t)I2C_SCL_PIN);
+    gpio_hold_en((gpio_num_t)LORA_TX_PIN);
     gpio_deep_sleep_hold_en();
 
     esp_sleep_enable_timer_wakeup((uint64_t)duration_s * uS_TO_S_FACTOR);
