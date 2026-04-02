@@ -94,6 +94,10 @@ void setup() {
         delay(50);
     }
 
+    if (!lora_is_joined()) {
+        logWarn("LoRa join timeout after 15s; continuing cycle for diagnostics", "SYSTEM");
+    }
+
     // if (!lora_is_joined()) {
     //     logError(ERR_TIMEOUT, "LoRa join");
     //     shutdown_and_sleep(DEEP_SLEEP_DURATION_S);

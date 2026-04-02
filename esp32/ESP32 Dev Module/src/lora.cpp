@@ -23,6 +23,10 @@ static bool            joined     = false;
 static unsigned long   lastSendMs = 0;
 static bool            joinLogged  = false;
 
+static void log_lora_line(const char* prefix, const String& line) {
+    logInfo((String(prefix) + line).c_str(), "LORA");
+}
+
 // ─── NVS helpers ──────────────────────────────────────────────────────────────
 
 static void load_calibration() {
@@ -50,6 +54,15 @@ static void save_tare() {
 // ─── AT command helper ────────────────────────────────────────────────────────
 
 static void send_at(const String& cmd) {
+    String masked = cmd;
+    if (masked.startsWith("AT+KEY=APPKEY")) {
+        masked = "AT+KEY=APPKEY,\"***\"";
+    }
+
+    if (LORA_VERBOSE_DEBUG) {
+        log_lora_line("TX RAW: ", masked);
+    }
+
     if (cmd.startsWith("AT+JOIN")) {
         logInfo("TX: Join request sent", "LORA");
     } else if (cmd.startsWith("AT+CMSGHEX")) {
@@ -116,6 +129,8 @@ static void handle_downlink(const String& line) {
 
 void lora_init() {
     load_calibration();
+    joined = false;
+    joinLogged = false;
 
     logInfo("LoRa init started", "LORA");
 
@@ -123,7 +138,13 @@ void lora_init() {
     vTaskDelay(1000);
     logInfo("Serial link ready", "LORA");
 
-    send_at("AT+MODE=LWOTAA"); vTaskDelay(500);
+    send_at("AT");                   vTaskDelay(200);
+    send_at("AT+MODE=LWOTAA");      vTaskDelay(300);
+    send_at(String("AT+DR=") + LORA_REGION); vTaskDelay(300);
+    send_at(String("AT+ID=DevEui,\"") + LORA_DEV_EUI + "\""); vTaskDelay(300);
+    send_at(String("AT+ID=AppEui,\"") + LORA_APP_EUI + "\""); vTaskDelay(300);
+    send_at(String("AT+KEY=APPKEY,\"") + LORA_APP_KEY + "\""); vTaskDelay(300);
+    send_at("AT+ID");                vTaskDelay(300);
 
     logInfo("Join procedure started", "LORA");
     send_at("AT+JOIN");
@@ -136,13 +157,30 @@ void lora_tick() {
         line.trim();
         if (line.length() == 0) continue;
 
+        if (LORA_VERBOSE_DEBUG) {
+            log_lora_line("RX RAW: ", line);
+        }
+
         if (!joinLogged && (line.indexOf("Join") >= 0 || line.indexOf("JOIN") >= 0)) {
             logInfo("RX: Join status update", "LORA");
             joinLogged = true;
         }
 
+        if (line.indexOf("Join failed") >= 0 || line.indexOf("JOIN FAILED") >= 0) {
+            joined = false;
+            logWarn("Join failed (check DevEUI/AppEUI/AppKey/coverage/gateway)", "LORA");
+        }
+
         if (line.indexOf("ERROR") >= 0 || line.indexOf("Error") >= 0 || line.indexOf("error") >= 0) {
             logWarn("RX: Module reported an error", "LORA");
+        }
+
+        if (line.indexOf("No free channel") >= 0) {
+            logWarn("TX delayed: no free channel (duty-cycle/channel)", "LORA");
+        }
+
+        if (line.indexOf("busy") >= 0 || line.indexOf("BUSY") >= 0) {
+            logWarn("Module busy: command ignored or delayed", "LORA");
         }
 
         if (!joined && (line.indexOf("Network joined") >= 0 ||
@@ -168,6 +206,10 @@ bool lora_should_send() {
 }
 
 void lora_send(const SensorPayload& payload) {
+    if (!joined) {
+        logWarn("Uplink requested while not joined", "LORA");
+    }
+
     lastSendMs = millis();
 
     const uint8_t* raw = reinterpret_cast<const uint8_t*>(&payload);
@@ -180,7 +222,7 @@ void lora_send(const SensorPayload& payload) {
     }
 
     logInfo(("Uplink prepared (" + String(sizeof(SensorPayload)) + " bytes)").c_str(), "LORA");
-    send_at("AT+CMSGHEX=\"" + hexPayload + "\"");
+    send_at("AT+CMSGHEX =\"" + hexPayload + "\"");
 }
 
 void lora_sleep() {

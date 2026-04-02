@@ -78,4 +78,8 @@
 #define LORA_APP_EUI  "0000000000000000"
 #define LORA_APP_KEY  "3EEA512460C979FF5FE036D9FAEB077D"
 
+// ── LoRa debug/region ─────────────────────────────────────────
+#define LORA_REGION "EU868"
+#define LORA_VERBOSE_DEBUG 1
+
 #endif /* CONFIG_H */
