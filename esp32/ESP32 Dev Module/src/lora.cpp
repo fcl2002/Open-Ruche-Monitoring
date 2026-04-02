@@ -29,6 +29,7 @@ static bool joinLogged = false;  // Suppress duplicate join status logs after fi
 static void load_calibration() {
     prefs.begin("nbee", false);
     cal.sendInterval = prefs.getUInt("interval",   LORA_DEFAULT_INTERVAL_MS);
+    cal.sleepDurationS = prefs.getUInt("sleepS",   DEEP_SLEEP_DURATION_S);
     cal.tempOffset   = (int16_t)prefs.getInt("tempOffset", 0);
     cal.humOffset    = (int8_t) prefs.getInt("humOffset",  0);
     cal.tareWeight   = prefs.getInt("tareWeight", 0);
@@ -37,6 +38,9 @@ static void load_calibration() {
 
 static void save_interval() {
     prefs.begin("nbee", false); prefs.putUInt("interval",   cal.sendInterval); prefs.end();
+}
+static void save_sleep_duration() {
+    prefs.begin("nbee", false); prefs.putUInt("sleepS",     cal.sleepDurationS); prefs.end();
 }
 static void save_temp() {
     prefs.begin("nbee", false); prefs.putInt("tempOffset",  cal.tempOffset);   prefs.end();
@@ -79,8 +83,10 @@ static void handle_downlink(const String& line) {
     if (cmdType == "01") {
         if (valueInt >= 1 && valueInt <= 60) {
             cal.sendInterval = (uint32_t)valueInt * 60 * 1000UL;
+            cal.sleepDurationS = (uint32_t)valueInt * 60UL;
             save_interval();
-            snprintf(msg, sizeof(msg), "Interval set to %d min", valueInt);
+            save_sleep_duration();
+            snprintf(msg, sizeof(msg), "Send/sleep interval set to %d min", valueInt);
             logInfo(msg, "LORA");
         }
     } else if (cmdType == "02") {
@@ -204,6 +210,10 @@ void lora_sleep() {
 
 const LoRaCalibration& lora_calibration() {
     return cal;
+}
+
+uint32_t lora_sleep_duration_s() {
+    return cal.sleepDurationS;
 }
 
 bool lora_is_joined() {

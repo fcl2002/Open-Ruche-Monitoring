@@ -29,6 +29,7 @@ struct LoRaCalibration {
     int8_t   humOffset;      // Additive humidity compensation (%)
     int32_t  tareWeight;     // HX711 reading (g*100) captured at tare time, stored as int32 to allow signed net calculation
     uint32_t sendInterval;   // Uplink interval in milliseconds
+    uint32_t sleepDurationS; // Deep sleep duration in seconds
 };
 
 // Initialise UART to the LoRa-E5 module, restore NVS calibration, and
@@ -53,6 +54,9 @@ void lora_sleep();
 
 // Current calibration values (updated live by downlink commands).
 const LoRaCalibration& lora_calibration();
+
+// Current deep sleep duration in seconds (updated by downlink command 01).
+uint32_t lora_sleep_duration_s();
 
 // True once the "Network joined" confirmation is received from the module.
 bool lora_is_joined();

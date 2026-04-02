@@ -156,13 +156,16 @@ void setup() {
 
     lora_send(payload);
 
-    // Listen for Class A downlink windows before sleeping
-    deadline = millis() + 5000;
+    // Listen long enough to cover RX1/RX2 windows even with scheduling jitter.
+    const unsigned long DOWNLINK_LISTEN_MS = 10000;
+    logInfo("Listening for downlink window...", "SYSTEM");
+    deadline = millis() + DOWNLINK_LISTEN_MS;
     while (millis() < deadline) {
         lora_tick();
         delay(50);
     }
-    shutdown_and_sleep(DEEP_SLEEP_DURATION_S);
+    logInfo("Downlink window closed", "SYSTEM");
+    shutdown_and_sleep(lora_sleep_duration_s());
 }
 
 void loop() {
