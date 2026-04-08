@@ -68,17 +68,17 @@ void setup() {
     snprintf(check_msg, sizeof(check_msg), "Climate conditions — lux=%u, ext_temp=%.1f C", lux, ext_temp / 10.0f);
     logInfo(check_msg, "SYSTEM");
 
-    // if (!is_active_period(lux, ext_temp)) {
-    //     snprintf(check_msg, sizeof(check_msg),
-    //              "Dormant mode (lux<%u or temp<%.1f C) — sleeping %lus",
-    //              LUX_ACTIVITY_THRESHOLD,
-    //              TEMP_ACTIVITY_THRESHOLD / 10.0f,
-    //              (unsigned long)DEEP_SLEEP_DORMANT_S);
-    //     logInfo(check_msg, "SYSTEM");
-    //     Serial.flush();
-    //     enter_deep_sleep(DEEP_SLEEP_DORMANT_S);
-    //     return;
-    // }
+    if (!is_active_period(lux, ext_temp)) {
+        snprintf(check_msg, sizeof(check_msg),
+                 "Dormant mode (lux<%u or temp<%.1f C) — sleeping %lus",
+                 LUX_ACTIVITY_THRESHOLD,
+                 TEMP_ACTIVITY_THRESHOLD / 10.0f,
+                 (unsigned long)DEEP_SLEEP_DURATION_S);
+        logInfo(check_msg, "SYSTEM");
+        Serial.flush();
+        enter_deep_sleep(DEEP_SLEEP_DURATION_S);
+        return;
+    }
 
     // ── Active mode — full uplink cycle
     logInfo("Active period confirmed — starting uplink cycle", "SYSTEM");
@@ -94,11 +94,11 @@ void setup() {
         delay(50);
     }
 
-    // if (!lora_is_joined()) {
-    //     logError(ERR_TIMEOUT, "LoRa join");
-    //     shutdown_and_sleep(DEEP_SLEEP_DURATION_S);
-    //     return;
-    // }
+    if (!lora_is_joined()) {
+        logError(ERR_TIMEOUT, "LoRa join");
+        shutdown_and_sleep(DEEP_SLEEP_DURATION_S);
+        return;
+    }
 
     logInfo("Reading sensors...", "SYSTEM");
 
