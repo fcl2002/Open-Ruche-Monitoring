@@ -12,7 +12,7 @@
 
 // ── Deep sleep ────────────────────────────────────────────────
 #define DEEP_SLEEP_DURATION_S   15       // Normal cycle: sleep and wake interval (seconds)
-#define DEEP_SLEEP_LORA_S       300      // Normal cycle: sleep and wake interval (seconds)
+#define DEEP_SLEEP_LORA_S       60      // Normal cycle: sleep and wake interval (seconds)
 #define DEEP_SLEEP_DORMANT_S    3600     // Dormant mode: 60 min between checks
 #define DORMANT_STREAK_MAX      12        // Force active cycle after this many consecutive dormant boots (~12 h)
 #define uS_TO_S_FACTOR          1000000
