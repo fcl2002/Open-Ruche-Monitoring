@@ -64,8 +64,14 @@ void enter_deep_sleep(uint32_t duration_s) {
     buzzer_sleep_beep();
     Serial.flush();
 
-    // Hold all controlled pins during deep sleep
-    // LORA_TX_PIN held HIGH — prevents LoRa-E5 from waking on a floating UART line
+    // Hold all controlled pins during deep sleep.
+    // LORA_TX_PIN is explicitly driven HIGH before the hold: in dormant mode
+    // lora_init() is never called so UART2 is uninitialised, and after
+    // sleep_gpio_release() GPIO17 defaults to floating input — which the
+    // LoRa-E5 sees as a continuous UART break on its RX line.
+    gpio_set_direction((gpio_num_t)LORA_TX_PIN, GPIO_MODE_OUTPUT);
+    gpio_set_level((gpio_num_t)LORA_TX_PIN, 1);
+
     gpio_hold_en((gpio_num_t)VREG_3V3_PIN);
     gpio_hold_en((gpio_num_t)VREG_5V_PIN);
     gpio_hold_en((gpio_num_t)I2C_SDA_PIN);

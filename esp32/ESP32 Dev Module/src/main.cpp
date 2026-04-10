@@ -9,14 +9,17 @@
 #include "boards.h"
 
 RTC_DATA_ATTR int bootCount = 0;
+RTC_DATA_ATTR int dormant_streak = 0;  // consecutive dormant boots; reset on active cycle
 
 // ── Activity gate ─────────────────────────────────────────────
 // Returns true when environmental conditions justify a full uplink
 // cycle. Both conditions must be met simultaneously:
 //   • lux  >= LUX_ACTIVITY_THRESHOLD  (daylight, bees are active)
 //   • temp >= TEMP_ACTIVITY_THRESHOLD (internal average temperature)
-// If either is below threshold the system is in dormant mode and
-// goes back to deep sleep without joining LoRa or reading all sensors.
+// On the first dormant boot (streak == 1) a final payload is still sent
+// so the server records the node entering dormant mode. Subsequent dormant
+// boots skip the uplink until the gate passes again or the streak limit
+// (DORMANT_STREAK_MAX) forces a recovery cycle.
 static bool is_active_period(uint16_t lux, int16_t temp_x10) {
     return (lux >= LUX_ACTIVITY_THRESHOLD) && (temp_x10 >= TEMP_ACTIVITY_THRESHOLD);
 }
@@ -85,6 +88,8 @@ static int16_t average_internal_temp_x10(int16_t dht_temp_x10, int16_t sonde1_te
 static void shutdown_and_sleep(uint32_t duration_s) {
     logInfo("Preparing LoRa module for sleep...", "SYSTEM");
     lora_sleep();
+    digitalWrite(VREG_3V3_PIN, LOW);
+    logInfo("Voltage regulator 3.3V OFF", "SLEEP");
     Serial.flush();
     enter_deep_sleep(duration_s);
 }
@@ -150,20 +155,44 @@ void setup() {
              avg_internal_temp / 10.0f);
     logInfo(check_msg, "SYSTEM");
 
+    bool first_dormant_uplink = false;
     if (!is_active_period(lux, avg_internal_temp)) {
-        snprintf(check_msg, sizeof(check_msg),
-                 "Dormant mode (lux<%u or temp<%.1f C) — sleeping %lus",
-                 LUX_ACTIVITY_THRESHOLD,
-                 TEMP_ACTIVITY_THRESHOLD / 10.0f,
-                 (unsigned long)DEEP_SLEEP_DORMANT_S);
-        logInfo(check_msg, "SYSTEM");
-        Serial.flush();
-        enter_deep_sleep(DEEP_SLEEP_DORMANT_S);
-        return;
+        ++dormant_streak;
+        if (dormant_streak == 1) {
+            // First time conditions fall below threshold: send one final payload
+            // so the server records the node entering dormant mode.
+            logInfo("First dormant boot — sending payload before dormant sleep", "SYSTEM");
+            first_dormant_uplink = true;
+        } else if (dormant_streak < DORMANT_STREAK_MAX) {
+            snprintf(check_msg, sizeof(check_msg),
+                     "Dormant mode (lux<%u or temp<%.1f C) — sleeping %lus [streak %d/%d]",
+                     LUX_ACTIVITY_THRESHOLD,
+                     TEMP_ACTIVITY_THRESHOLD / 10.0f,
+                     (unsigned long)DEEP_SLEEP_DORMANT_S,
+                     dormant_streak,
+                     DORMANT_STREAK_MAX);
+            logInfo(check_msg, "SYSTEM");
+            digitalWrite(VREG_3V3_PIN, LOW);
+            logInfo("Voltage regulator 3.3V OFF", "SLEEP");
+            Serial.flush();
+            enter_deep_sleep(DEEP_SLEEP_DORMANT_S);
+            return;
+        } else {
+            // Streak limit reached: a sensor may be stuck — force one active cycle
+            // to prevent the node from being locked out indefinitely.
+            snprintf(check_msg, sizeof(check_msg),
+                     "Dormant streak limit (%d) reached — forcing active cycle",
+                     DORMANT_STREAK_MAX);
+            logWarn(check_msg, "SYSTEM");
+            dormant_streak = 0;
+        }
     }
 
-    // ── Active mode — full uplink cycle
-    logInfo("Active period confirmed — starting uplink cycle", "SYSTEM");
+    // ── Active mode — full uplink cycle (gate passed, first dormant, or streak override)
+    if (!first_dormant_uplink) dormant_streak = 0;
+    logInfo(first_dormant_uplink
+        ? "Sending final payload before entering dormant mode"
+        : "Active period confirmed — starting uplink cycle", "SYSTEM");
 
     lora_init();
 
@@ -245,7 +274,7 @@ void setup() {
         delay(50);
     }
     logInfo("Downlink window closed", "SYSTEM");
-    shutdown_and_sleep(lora_sleep_duration_s());
+    shutdown_and_sleep(first_dormant_uplink ? DEEP_SLEEP_DORMANT_S : lora_sleep_duration_s());
 }
 
 void loop() {
