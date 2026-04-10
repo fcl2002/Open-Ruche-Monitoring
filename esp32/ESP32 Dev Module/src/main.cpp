@@ -14,11 +14,72 @@ RTC_DATA_ATTR int bootCount = 0;
 // Returns true when environmental conditions justify a full uplink
 // cycle. Both conditions must be met simultaneously:
 //   • lux  >= LUX_ACTIVITY_THRESHOLD  (daylight, bees are active)
-//   • temp >= TEMP_ACTIVITY_THRESHOLD (above minimum foraging temp)
+//   • temp >= TEMP_ACTIVITY_THRESHOLD (internal average temperature)
 // If either is below threshold the system is in dormant mode and
 // goes back to deep sleep without joining LoRa or reading all sensors.
-static bool is_active_period(uint16_t lux, int16_t ext_temp_x10) {
-    return (lux >= LUX_ACTIVITY_THRESHOLD) && (ext_temp_x10 >= TEMP_ACTIVITY_THRESHOLD);
+static bool is_active_period(uint16_t lux, int16_t temp_x10) {
+    return (lux >= LUX_ACTIVITY_THRESHOLD) && (temp_x10 >= TEMP_ACTIVITY_THRESHOLD);
+}
+
+static int16_t median3_i16(int16_t a, int16_t b, int16_t c) {
+    if (a > b) {
+        int16_t t = a;
+        a = b;
+        b = t;
+    }
+    if (b > c) {
+        int16_t t = b;
+        b = c;
+        c = t;
+    }
+    if (a > b) {
+        int16_t t = a;
+        a = b;
+        b = t;
+    }
+    return b;
+}
+
+static uint16_t median3_u16(uint16_t a, uint16_t b, uint16_t c) {
+    if (a > b) {
+        uint16_t t = a;
+        a = b;
+        b = t;
+    }
+    if (b > c) {
+        uint16_t t = b;
+        b = c;
+        c = t;
+    }
+    if (a > b) {
+        uint16_t t = a;
+        a = b;
+        b = t;
+    }
+    return b;
+}
+
+static int16_t average_internal_temp_x10(int16_t dht_temp_x10, int16_t sonde1_temp_x10, int16_t sonde2_temp_x10) {
+    int32_t sum = 0;
+    uint8_t count = 0;
+
+    if (dht_temp_x10 != SENSOR_ERROR_VALUE) {
+        sum += dht_temp_x10;
+        count++;
+    }
+    if (sonde1_temp_x10 != SENSOR_ERROR_VALUE) {
+        sum += sonde1_temp_x10;
+        count++;
+    }
+    if (sonde2_temp_x10 != SENSOR_ERROR_VALUE) {
+        sum += sonde2_temp_x10;
+        count++;
+    }
+
+    if (count == 0) {
+        return SENSOR_ERROR_VALUE;
+    }
+    return (int16_t)(sum / (int32_t)count);
 }
 
 static void shutdown_and_sleep(uint32_t duration_s) {
@@ -55,28 +116,49 @@ void setup() {
     Serial.println("[DEBUG] sensors_init done");
     boards_init();
 
-    // Quick environmental check 
-    // Read only luminosity and external temperature — cheap reads
-    // that decide whether conditions are suitable for a full cycle.
+    // Quick environmental check
+    // Read luminosity and internal temperatures used by the activity gate.
     // This avoids waking the LoRa module and reading all sensors
     // during the night or in cold weather.
-    uint16_t lux = read_sen0562();
-    DHT22Result ext = read_dht22(external_dht, "External DHT22");
-    int16_t ext_temp = ext.temperature;  // °C × 10
+    const uint8_t GATE_SAMPLES = 3;
+    uint16_t lux_samples[GATE_SAMPLES];
+    int16_t avg_temp_samples[GATE_SAMPLES];
+
+    DHT22Result intr = {0, SENSOR_ERROR_VALUE};
+    int16_t s1 = SENSOR_ERROR_VALUE;
+    int16_t s2 = SENSOR_ERROR_VALUE;
+
+    for (uint8_t i = 0; i < GATE_SAMPLES; ++i) {
+        lux_samples[i] = read_sen0562();
+        intr = read_dht22(internal_dht, "Internal DHT22");
+        s1 = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
+        s2 = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
+        avg_temp_samples[i] = average_internal_temp_x10(intr.temperature, s1, s2);
+
+        if (i + 1 < GATE_SAMPLES) {
+            delay(200);
+        }
+    }
+
+    uint16_t lux = median3_u16(lux_samples[0], lux_samples[1], lux_samples[2]);
+    int16_t avg_internal_temp = median3_i16(avg_temp_samples[0], avg_temp_samples[1], avg_temp_samples[2]);  // °C × 10
 
     char check_msg[80];
-    snprintf(check_msg, sizeof(check_msg), "Climate conditions — lux=%u, ext_temp=%.1f C", lux, ext_temp / 10.0f);
+    snprintf(check_msg, sizeof(check_msg),
+             "Climate conditions (median) — lux=%u, int_avg=%.1f C",
+             lux,
+             avg_internal_temp / 10.0f);
     logInfo(check_msg, "SYSTEM");
 
-    if (!is_active_period(lux, ext_temp)) {
+    if (!is_active_period(lux, avg_internal_temp)) {
         snprintf(check_msg, sizeof(check_msg),
                  "Dormant mode (lux<%u or temp<%.1f C) — sleeping %lus",
                  LUX_ACTIVITY_THRESHOLD,
                  TEMP_ACTIVITY_THRESHOLD / 10.0f,
-                 (unsigned long)DEEP_SLEEP_DURATION_S);
+                 (unsigned long)DEEP_SLEEP_DORMANT_S);
         logInfo(check_msg, "SYSTEM");
         Serial.flush();
-        enter_deep_sleep(DEEP_SLEEP_DURATION_S);
+        enter_deep_sleep(DEEP_SLEEP_DORMANT_S);
         return;
     }
 
@@ -96,7 +178,7 @@ void setup() {
 
     if (!lora_is_joined()) {
         logError(ERR_TIMEOUT, "LoRa join");
-        shutdown_and_sleep(DEEP_SLEEP_DURATION_S);
+        shutdown_and_sleep(DEEP_SLEEP_LORA_S);
         return;
     }
 
@@ -105,26 +187,24 @@ void setup() {
     const LoRaCalibration& cal = lora_calibration();
     SensorPayload payload = {0};
 
-    // External DHT22 — reuse the reading already taken in the quick check
+    // External DHT22
+    DHT22Result ext = read_dht22(external_dht, "External DHT22");
     payload.ext_humidity = (int8_t)constrain(ext.humidity + cal.humOffset, 0, 100);
-    payload.ext_temperature = (ext_temp != SENSOR_ERROR_VALUE)
-                                  ? ext_temp + cal.tempOffset
+    payload.ext_temperature = (ext.temperature != SENSOR_ERROR_VALUE)
+                                  ? ext.temperature + cal.tempOffset
                                   : (int16_t)SENSOR_ERROR_VALUE;
 
     // Internal DHT22 — apply humidity and temperature offsets
-    DHT22Result intr = read_dht22(internal_dht, "Internal DHT22");
     payload.int_humidity = (int8_t)constrain(intr.humidity + cal.humOffset, 0, 100);
     payload.int_temperature = (intr.temperature != SENSOR_ERROR_VALUE)
                                   ? intr.temperature + cal.tempOffset
                                   : (int16_t)SENSOR_ERROR_VALUE;
 
     // DS18B20 sondes — apply temperature offset
-    int16_t s1 = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
     payload.sonde1_temperature = (s1 != SENSOR_ERROR_VALUE)
                                      ? s1 + cal.tempOffset
                                      : (int16_t)SENSOR_ERROR_VALUE;
 
-    int16_t s2 = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
     payload.sonde2_temperature = (s2 != SENSOR_ERROR_VALUE)
                                      ? s2 + cal.tempOffset
                                      : (int16_t)SENSOR_ERROR_VALUE;

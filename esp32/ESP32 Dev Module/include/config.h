@@ -11,16 +11,17 @@
 #define CONFIG_H
 
 // ── Deep sleep ────────────────────────────────────────────────
-#define DEEP_SLEEP_DURATION_S   15      // Normal cycle: sleep and wake interval (seconds)
-#define DEEP_SLEEP_DORMANT_S    15    // Dormant mode: 30 min between checks
+#define DEEP_SLEEP_DURATION_S   15       // Normal cycle: sleep and wake interval (seconds)
+#define DEEP_SLEEP_LORA_S       300      // Normal cycle: sleep and wake interval (seconds)
+#define DEEP_SLEEP_DORMANT_S    3600     // Dormant mode: 60 min between checks
 #define uS_TO_S_FACTOR          1000000
-#define AI_READ_TIME            10000   // AI Boards read time
+#define AI_READ_TIME            10000    // AI Boards read time
 
 // ── Activity thresholds ───────────────────────────────────────
 // Both conditions must be true to enter the active (uplink) cycle.
 // Below either threshold the system stays in dormant deep sleep.
 #define LUX_ACTIVITY_THRESHOLD   100   // lux  — minimum daylight level
-#define TEMP_ACTIVITY_THRESHOLD  100   // °C×10 — 10.0 °C minimum
+#define TEMP_ACTIVITY_THRESHOLD  150   // °C×10 — 15.0 °C minimum
 
 // ── Battery ADC ───────────────────────────────────────────────
 #define BATTERY_ADC_PIN         35          // ADC1_CH7 — battery voltage sense (V_BAT = 1.435 * raw/4095 * 3.3)
