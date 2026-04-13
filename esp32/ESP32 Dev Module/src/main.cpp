@@ -7,192 +7,106 @@
 #include "sleep.h"
 #include "lora.h"
 #include "boards.h"
-
-RTC_DATA_ATTR int bootCount = 0;
+#if DEBUG_MODE
+    RTC_DATA_ATTR int bootCount = 0;
+#endif
 RTC_DATA_ATTR int dormant_streak = 0;  // consecutive dormant boots; reset on active cycle
-
-// ── Activity gate ─────────────────────────────────────────────
-// Returns true when environmental conditions justify a full uplink
-// cycle. Both conditions must be met simultaneously:
-//   • lux  >= LUX_ACTIVITY_THRESHOLD  (daylight, bees are active)
-//   • temp >= TEMP_ACTIVITY_THRESHOLD (internal average temperature)
-// On the first dormant boot (streak == 1) a final payload is still sent
-// so the server records the node entering dormant mode. Subsequent dormant
-// boots skip the uplink until the gate passes again or the streak limit
-// (DORMANT_STREAK_MAX) forces a recovery cycle.
-static bool is_active_period(uint16_t lux, int16_t temp_x10) {
-    return (lux >= LUX_ACTIVITY_THRESHOLD) && (temp_x10 >= TEMP_ACTIVITY_THRESHOLD);
-}
-
-static int16_t median3_i16(int16_t a, int16_t b, int16_t c) {
-    if (a > b) {
-        int16_t t = a;
-        a = b;
-        b = t;
-    }
-    if (b > c) {
-        int16_t t = b;
-        b = c;
-        c = t;
-    }
-    if (a > b) {
-        int16_t t = a;
-        a = b;
-        b = t;
-    }
-    return b;
-}
-
-static uint16_t median3_u16(uint16_t a, uint16_t b, uint16_t c) {
-    if (a > b) {
-        uint16_t t = a;
-        a = b;
-        b = t;
-    }
-    if (b > c) {
-        uint16_t t = b;
-        b = c;
-        c = t;
-    }
-    if (a > b) {
-        uint16_t t = a;
-        a = b;
-        b = t;
-    }
-    return b;
-}
-
-static int16_t average_internal_temp_x10(int16_t dht_temp_x10, int16_t sonde1_temp_x10, int16_t sonde2_temp_x10) {
-    int32_t sum = 0;
-    uint8_t count = 0;
-
-    if (dht_temp_x10 != SENSOR_ERROR_VALUE) {
-        sum += dht_temp_x10;
-        count++;
-    }
-    if (sonde1_temp_x10 != SENSOR_ERROR_VALUE) {
-        sum += sonde1_temp_x10;
-        count++;
-    }
-    if (sonde2_temp_x10 != SENSOR_ERROR_VALUE) {
-        sum += sonde2_temp_x10;
-        count++;
-    }
-
-    if (count == 0) {
-        return SENSOR_ERROR_VALUE;
-    }
-    return (int16_t)(sum / (int32_t)count);
-}
 
 static void shutdown_and_sleep(uint32_t duration_s) {
     logInfo("Preparing LoRa module for sleep...", "SYSTEM");
-    lora_sleep();
+    lora_power_off();
     digitalWrite(VREG_3V3_PIN, LOW);
     logInfo("Voltage regulator 3.3V OFF", "SLEEP");
+#if DEBUG_MODE
     Serial.flush();
+#endif
     enter_deep_sleep(duration_s);
 }
 
 void setup() {
+#if DEBUG_MODE
     Serial.begin(115200);
     delay(100);
-
+#endif
+#if DEBUG_MODE
     ++bootCount;
+#endif
+#if DEBUG_MODE
     Serial.println("\n----------------------");
     Serial.println(String(bootCount) + "th Boot");
+#endif
 
     buzzer_boot_beep();
     sleep_gpio_release();
+
+    pinMode(VREG_5V_PIN, OUTPUT);
+    digitalWrite(VREG_5V_PIN, LOW);
+    logInfo("Voltage regulator 5V OFF", "SLEEP");
 
     pinMode(VREG_3V3_PIN, OUTPUT);
     digitalWrite(VREG_3V3_PIN, HIGH);
     logInfo("Voltage regulator 3.3v ON", "SLEEP");
 
-    delay(2000);
-
     setLogLevel(LOG_INFO);
+#if DEBUG_MODE
     print_wakeup_reason();
+#endif
 
     logInfo("Open Ruche Monitoring System Starting...", "SYSTEM");
+    // 2. Quick night check (lux only)
+    // Bring up I2C just long enough to decide whether we should remain awake.
+    Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
+    delay(20);
+    uint16_t lux = read_sen0562();
 
-    Serial.println("[DEBUG] Starting sensors_init...");
-    sensors_init();
-    Serial.println("[DEBUG] sensors_init done");
-    boards_init();
-
-    // Quick environmental check
-    // Read luminosity and internal temperatures used by the activity gate.
-    // This avoids waking the LoRa module and reading all sensors
-    // during the night or in cold weather.
-    const uint8_t GATE_SAMPLES = 3;
-    uint16_t lux_samples[GATE_SAMPLES];
-    int16_t avg_temp_samples[GATE_SAMPLES];
-
-    DHT22Result intr = {0, SENSOR_ERROR_VALUE};
-    int16_t s1 = SENSOR_ERROR_VALUE;
-    int16_t s2 = SENSOR_ERROR_VALUE;
-
-    for (uint8_t i = 0; i < GATE_SAMPLES; ++i) {
-        lux_samples[i] = read_sen0562();
-        intr = read_dht22(internal_dht, "Internal DHT22");
-        s1 = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
-        s2 = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
-        avg_temp_samples[i] = average_internal_temp_x10(intr.temperature, s1, s2);
-
-        if (i + 1 < GATE_SAMPLES) {
-            delay(200);
-        }
-    }
-
-    uint16_t lux = median3_u16(lux_samples[0], lux_samples[1], lux_samples[2]);
-    int16_t avg_internal_temp = median3_i16(avg_temp_samples[0], avg_temp_samples[1], avg_temp_samples[2]);  // °C × 10
-
-    char check_msg[80];
+    char check_msg[96];
     snprintf(check_msg, sizeof(check_msg),
-             "Climate conditions (median) — lux=%u, int_avg=%.1f C",
+             "Quick  check — lux=%u (threshold=%u)",
              lux,
-             avg_internal_temp / 10.0f);
+             LUX_ACTIVITY_THRESHOLD);
     logInfo(check_msg, "SYSTEM");
 
-    bool first_dormant_uplink = false;
-    if (!is_active_period(lux, avg_internal_temp)) {
+    if (lux < LUX_ACTIVITY_THRESHOLD) {
         ++dormant_streak;
-        if (dormant_streak == 1) {
-            // First time conditions fall below threshold: send one final payload
-            // so the server records the node entering dormant mode.
-            logInfo("First dormant boot — sending payload before dormant sleep", "SYSTEM");
-            first_dormant_uplink = true;
-        } else if (dormant_streak < DORMANT_STREAK_MAX) {
-            snprintf(check_msg, sizeof(check_msg),
-                     "Dormant mode (lux<%u or temp<%.1f C) — sleeping %lus [streak %d/%d]",
-                     LUX_ACTIVITY_THRESHOLD,
-                     TEMP_ACTIVITY_THRESHOLD / 10.0f,
-                     (unsigned long)DEEP_SLEEP_DORMANT_S,
-                     dormant_streak,
-                     DORMANT_STREAK_MAX);
-            logInfo(check_msg, "SYSTEM");
-            digitalWrite(VREG_3V3_PIN, LOW);
-            logInfo("Voltage regulator 3.3V OFF", "SLEEP");
-            Serial.flush();
-            enter_deep_sleep(DEEP_SLEEP_DORMANT_S);
-            return;
-        } else {
-            // Streak limit reached: a sensor may be stuck — force one active cycle
-            // to prevent the node from being locked out indefinitely.
-            snprintf(check_msg, sizeof(check_msg),
-                     "Dormant streak limit (%d) reached — forcing active cycle",
-                     DORMANT_STREAK_MAX);
-            logWarn(check_msg, "SYSTEM");
-            dormant_streak = 0;
-        }
+        snprintf(check_msg, sizeof(check_msg),
+                 "Dormant mode (lux=%u) — sleeping %lus [streak %d]",
+                 lux,
+                 (unsigned long)DEEP_SLEEP_DORMANT_S,
+                 dormant_streak);
+        logInfo(check_msg, "SYSTEM");
+        lora_power_off();
+        digitalWrite(VREG_3V3_PIN, LOW);
+        digitalWrite(VREG_5V_PIN, LOW);
+        logInfo("Voltage regulator 3.3V OFF", "SLEEP");
+        logInfo("Voltage regulator 5V OFF", "SLEEP");
+#if DEBUG_MODE
+        Serial.flush();
+#endif
+        enter_deep_sleep(DEEP_SLEEP_DORMANT_S);
+        return;
+    } else {
+        dormant_streak = 0;
     }
 
-    // ── Active mode — full uplink cycle (gate passed, first dormant, or streak override)
-    if (!first_dormant_uplink) dormant_streak = 0;
-    logInfo(first_dormant_uplink
-        ? "Sending final payload before entering dormant mode"
-        : "Active period confirmed — starting uplink cycle", "SYSTEM");
+    // 3. Full wakeup (daytime)
+    // We already spent ~200 ms on quick lux check; wait the remaining time
+    // for DHT22/DS18B20 stabilization before reading them.
+    delay(1800);
+
+#if DEBUG_MODE
+    Serial.println("[DEBUG] Starting sensors_init...");
+#endif
+    sensors_init();
+#if DEBUG_MODE
+    Serial.println("[DEBUG] sensors_init done");
+#endif
+    boards_init();
+
+    DHT22Result intr = read_dht22(internal_dht, "Internal DHT22");
+    int16_t s1 = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
+    int16_t s2 = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
+
+    logInfo("Daylight confirmed — starting uplink cycle", "SYSTEM");
 
     lora_init();
 
@@ -274,7 +188,7 @@ void setup() {
         delay(50);
     }
     logInfo("Downlink window closed", "SYSTEM");
-    shutdown_and_sleep(first_dormant_uplink ? DEEP_SLEEP_DORMANT_S : lora_sleep_duration_s());
+    shutdown_and_sleep(lora_sleep_duration_s());
 }
 
 void loop() {

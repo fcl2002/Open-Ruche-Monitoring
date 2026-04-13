@@ -208,6 +208,20 @@ void lora_sleep() {
     delay(500);
 }
 
+void lora_power_off() {
+    // Try to put module in low-power mode even if this cycle did not fully use LoRa.
+    lora_sleep();
+    loraSerial.flush();
+    loraSerial.end();
+
+    // Keep LoRa RX line idle-high and avoid floating UART pins.
+    pinMode(LORA_TX_PIN, OUTPUT);
+    digitalWrite(LORA_TX_PIN, HIGH);
+    pinMode(LORA_RX_PIN, INPUT_PULLUP);
+
+    logInfo("LoRa interface forced to low-power state", "LORA");
+}
+
 const LoRaCalibration& lora_calibration() {
     return cal;
 }

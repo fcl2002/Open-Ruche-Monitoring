@@ -1,4 +1,5 @@
 #include "logger.h"
+#include "config.h"
 
 static LogLevel currentLogLevel = LOG_INFO;  // Default log level
 
@@ -7,6 +8,7 @@ void setLogLevel(LogLevel level) {
 }
 
 static void printLog(const char* level, const char* message, const char* context) {
+#if DEBUG_MODE
     Serial.print("[");
     Serial.print(level);
     Serial.print("] ");
@@ -17,6 +19,11 @@ static void printLog(const char* level, const char* message, const char* context
     }
     
     Serial.println(message);
+    #else
+        (void)level;
+        (void)message;
+        (void)context;
+    #endif
 }
 
 void logDebug(const char* message, const char* context) {

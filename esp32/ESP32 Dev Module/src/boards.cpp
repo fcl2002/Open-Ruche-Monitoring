@@ -25,6 +25,7 @@ uint8_t read_audio(void) {
     }
 
     if (!micSerial.available()) return 0;
+    micSerial.flush();
     return (uint8_t)micSerial.read();
 }
 
@@ -35,5 +36,6 @@ uint8_t read_camera(void) {
     }
 
     if (!camSerial.available()) return 0;
+    camSerial.flush();
     return (uint8_t)camSerial.read();
 }

@@ -7,6 +7,7 @@
 #include "esp_sleep.h"
 
 void print_wakeup_reason() {
+#if DEBUG_MODE
     switch (esp_sleep_get_wakeup_cause()) {
         case ESP_SLEEP_WAKEUP_EXT0:     Serial.println("Wake-up from external signal with RTC_IO");   break;
         case ESP_SLEEP_WAKEUP_EXT1:     Serial.println("Wake-up from external signal with RTC_CNTL"); break;
@@ -15,6 +16,7 @@ void print_wakeup_reason() {
         default:
             Serial.printf("Wake up not caused by Deep Sleep: %d\n", esp_sleep_get_wakeup_cause());    break;
     }
+#endif
 }
 
 void sleep_gpio_release() {
@@ -62,7 +64,9 @@ void enter_deep_sleep(uint32_t duration_s) {
     logInfo(msg, "SLEEP");
 
     buzzer_sleep_beep();
+#if DEBUG_MODE
     Serial.flush();
+#endif
 
     // Hold all controlled pins during deep sleep.
     // LORA_TX_PIN is explicitly driven HIGH before the hold: in dormant mode

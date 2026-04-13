@@ -52,6 +52,10 @@ void lora_send(const SensorPayload& payload);
 // Call this right before the ESP32 enters deep sleep.
 void lora_sleep();
 
+// Explicitly force LoRa interface to low-power state and release UART.
+// Safe to call even when LoRa was not initialised in the current cycle.
+void lora_power_off();
+
 // Current calibration values (updated live by downlink commands).
 const LoRaCalibration& lora_calibration();
 
