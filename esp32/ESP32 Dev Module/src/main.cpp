@@ -1,127 +1,196 @@
 #include <Arduino.h>
+#include "config.h"
 #include "sensors.h"
 #include "errors.h"
 #include "logger.h"
+#include "payload.h"
+#include "sleep.h"
+#include "lora.h"
+#include "boards.h"
+#if DEBUG_MODE
+    RTC_DATA_ATTR int bootCount = 0;
+#endif
+RTC_DATA_ATTR int dormant_streak = 0;  // consecutive dormant boots; reset on active cycle
 
-//GPIO HOLD ENABLE
-
-bool setupDelayDone = false;
-unsigned long setupStartTime = 0;
-
-void setup() {
-	Serial.begin(115200);
-	delay(100);  // Wait for serial to stabilize
-	
-	// Set log level (can be changed to LOG_DEBUG for verbose output)
-	setLogLevel(LOG_INFO);
-	
-	logInfo("Open Ruche Monitoring System Starting...", "SYSTEM");
-    setupStartTime = millis();
-
-    // HX711
-    logInfo("Initializing HX711...", "SETUP");
-	hx711.begin(HX711_DOUT_PIN, HX711_SCK_PIN);
-	delay(200);
-	hx711.set_scale(30148);
-	hx711.set_offset(134750);
-	delay(200);
-
-    // DHT22
-    logInfo("Initializing DHT22 sensors...", "SETUP");
-	external_dht.begin();
-	internal_dht.begin();
-
-	// DS18B20 Sondes
-	logInfo("Initializing DS18B20 sensors...", "SETUP");
-	sondes.begin();
-    
-    int deviceCount = sondes.getDeviceCount();
-    char msg[50];
-    snprintf(msg, sizeof(msg), "Found %d DS18B20 device(s)", deviceCount);
-    logInfo(msg, "SETUP");
-    
-    if (deviceCount > 0) {
-        sondes.getAddress(sonde1, 0);
-    } else {
-        logError(ERR_DEVICE_NOT_FOUND, "DS18B20 Sonde 1");
-    }
-    
-    if (deviceCount > 1) {
-        sondes.getAddress(sonde2, 1);
-    } else if (deviceCount == 1) {
-        logError(ERR_DEVICE_NOT_FOUND, "DS18B20 Sonde 2");
-    }
-
-    // SEN0562
-    logInfo("Initializing I2C for SEN0562...", "SETUP");
-    Wire.begin(); // using default SDA/SCL
-    
-    // MMA8451 Accelerometer
-    logInfo("Initializing MMA8451 accelerometer...", "SETUP");
-    if (!mma.begin(MMA8451_ADDR)) {
-        logError(ERR_DEVICE_NOT_FOUND, "MMA8451");
-    } else {
-        mma.setRange(MMA8451_RANGE_2_G);  // Set range to 2G for better precision
-        logInfo("MMA8451 initialized successfully", "SETUP");
-    }
-    
-    logInfo("Setup complete. System ready.", "SYSTEM");
+static void shutdown_and_sleep(uint32_t duration_s) {
+    logInfo("Preparing LoRa module for sleep...", "SYSTEM");
+    lora_power_off();
+    digitalWrite(VREG_3V3_PIN, LOW);
+    logInfo("Voltage regulator 3.3V OFF", "SLEEP");
+#if DEBUG_MODE
+    Serial.flush();
+#endif
+    enter_deep_sleep(duration_s);
 }
 
-uint8_t payload[20];  // 1 + 2 + 1 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 = 18 bytes
+void setup() {
+#if DEBUG_MODE
+    Serial.begin(115200);
+    delay(100);
+#endif
+#if DEBUG_MODE
+    ++bootCount;
+#endif
+#if DEBUG_MODE
+    Serial.println("\n----------------------");
+    Serial.println(String(bootCount) + "th Boot");
+#endif
 
-void loop() {
-    if (!setupDelayDone) {
-        if (millis() - setupStartTime >= TIME_SETUP)
-            setupDelayDone = true;
+    buzzer_boot_beep();
+    sleep_gpio_release();
+
+    pinMode(VREG_5V_PIN, OUTPUT);
+    digitalWrite(VREG_5V_PIN, LOW);
+    logInfo("Voltage regulator 5V OFF", "SLEEP");
+
+    pinMode(VREG_3V3_PIN, OUTPUT);
+    digitalWrite(VREG_3V3_PIN, HIGH);
+    logInfo("Voltage regulator 3.3v ON", "SLEEP");
+
+    setLogLevel(LOG_INFO);
+#if DEBUG_MODE
+    print_wakeup_reason();
+#endif
+
+    logInfo("Open Ruche Monitoring System Starting...", "SYSTEM");
+    // 2. Quick night check (lux only)
+    // Bring up I2C just long enough to decide whether we should remain awake.
+    Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
+    delay(20);
+    uint16_t lux = read_sen0562();
+
+    char check_msg[96];
+    snprintf(check_msg, sizeof(check_msg),
+             "Quick  check — lux=%u (threshold=%u)",
+             lux,
+             LUX_ACTIVITY_THRESHOLD);
+    logInfo(check_msg, "SYSTEM");
+
+    if (lux < LUX_ACTIVITY_THRESHOLD) {
+        ++dormant_streak;
+        snprintf(check_msg, sizeof(check_msg),
+                 "Dormant mode (lux=%u) — sleeping %lus [streak %d]",
+                 lux,
+                 (unsigned long)DEEP_SLEEP_DORMANT_S,
+                 dormant_streak);
+        logInfo(check_msg, "SYSTEM");
+        lora_power_off();
+        digitalWrite(VREG_3V3_PIN, LOW);
+        digitalWrite(VREG_5V_PIN, LOW);
+        logInfo("Voltage regulator 3.3V OFF", "SLEEP");
+        logInfo("Voltage regulator 5V OFF", "SLEEP");
+#if DEBUG_MODE
+        Serial.flush();
+#endif
+        enter_deep_sleep(DEEP_SLEEP_DORMANT_S);
+        return;
+    } else {
+        dormant_streak = 0;
+    }
+
+    // 3. Full wakeup (daytime)
+    // We already spent ~200 ms on quick lux check; wait the remaining time
+    // for DHT22/DS18B20 stabilization before reading them.
+    delay(1800);
+
+#if DEBUG_MODE
+    Serial.println("[DEBUG] Starting sensors_init...");
+#endif
+    sensors_init();
+#if DEBUG_MODE
+    Serial.println("[DEBUG] sensors_init done");
+#endif
+    boards_init();
+
+    DHT22Result intr = read_dht22(internal_dht, "Internal DHT22");
+    int16_t s1 = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
+    int16_t s2 = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
+
+    logInfo("Daylight confirmed — starting uplink cycle", "SYSTEM");
+
+    lora_init();
+
+    // Wait for OTAA join — the LoRa-E5 responds quickly if session is still active.
+    logInfo("Waiting for LoRa network join...", "SYSTEM");
+    const unsigned long JOIN_TIMEOUT_MS = 15000;
+    unsigned long deadline = millis() + JOIN_TIMEOUT_MS;
+    while (!lora_is_joined() && millis() < deadline) {
+        lora_tick();
+        delay(50);
+    }
+
+    if (!lora_is_joined()) {
+        logError(ERR_TIMEOUT, "LoRa join");
+        shutdown_and_sleep(DEEP_SLEEP_LORA_S);
         return;
     }
 
-    // Read DHT22 every 10 minutes
-    if (millis() - lastRead >= TIME_TO_READ) {
-        logInfo("Starting sensor readings...", "LOOP");
-        int idx = 0;
+    logInfo("Reading sensors...", "SYSTEM");
 
-        DHT22Result ext_dht22 = read_dht22(external_dht, "External DHT22");
-        payload[idx++] = ext_dht22.humidity;
-        memcpy(&payload[idx], &ext_dht22.temperature, sizeof(int16_t)); 
-        idx += 2;
-        
-        DHT22Result int_dht22 = read_dht22(internal_dht, "Internal DHT22");
-        payload[idx++] = int_dht22.humidity;
-        memcpy(&payload[idx], &int_dht22.temperature, sizeof(int16_t)); 
-        idx += 2;
-        
-        int16_t sonde1_read = read_ds18b20_sonde(sonde1, "DS18B20 Sonde 1");
-        memcpy(&payload[idx], &sonde1_read, sizeof(int16_t)); 
-        idx += 2;
+    const LoRaCalibration& cal = lora_calibration();
+    SensorPayload payload = {0};
 
-        int16_t sonde2_read = read_ds18b20_sonde(sonde2, "DS18B20 Sonde 2");
-        memcpy(&payload[idx], &sonde2_read, sizeof(int16_t)); 
-        idx += 2;
-        
-        uint16_t lux_read = read_sen0562();
-        memcpy(&payload[idx], &lux_read, sizeof(uint16_t)); 
-        idx += 2;
-        
-        AccelResult accel_data = read_mma8451();
-        memcpy(&payload[idx], &accel_data.x, sizeof(int16_t)); 
-        idx += 2;
-        memcpy(&payload[idx], &accel_data.y, sizeof(int16_t)); 
-        idx += 2;
-        memcpy(&payload[idx], &accel_data.z, sizeof(int16_t)); 
-        idx += 2;
+    // External DHT22
+    DHT22Result ext = read_dht22(external_dht, "External DHT22");
+    payload.ext_humidity = (int8_t)constrain(ext.humidity + cal.humOffset, 0, 100);
+    payload.ext_temperature = (ext.temperature != SENSOR_ERROR_VALUE)
+                                  ? ext.temperature + cal.tempOffset
+                                  : (int16_t)SENSOR_ERROR_VALUE;
 
-        uint16_t loadcell_data = read_hx711();
-        memcpy(&payload[idx], &loadcell_data, sizeof(uint16_t)); 
-        idx += 2;
+    // Internal DHT22 — apply humidity and temperature offsets
+    payload.int_humidity = (int8_t)constrain(intr.humidity + cal.humOffset, 0, 100);
+    payload.int_temperature = (intr.temperature != SENSOR_ERROR_VALUE)
+                                  ? intr.temperature + cal.tempOffset
+                                  : (int16_t)SENSOR_ERROR_VALUE;
 
-        logDebug("Payload ready for transmission", "LOOP");
-        for (int i = 0; i < 20; i++) {
-            Serial.print(payload[i], HEX); // ou DEC
-            Serial.print(" ");
-        }
-        Serial.println();
-        lastRead = millis();
+    // DS18B20 sondes — apply temperature offset
+    payload.sonde1_temperature = (s1 != SENSOR_ERROR_VALUE)
+                                     ? s1 + cal.tempOffset
+                                     : (int16_t)SENSOR_ERROR_VALUE;
+
+    payload.sonde2_temperature = (s2 != SENSOR_ERROR_VALUE)
+                                     ? s2 + cal.tempOffset
+                                     : (int16_t)SENSOR_ERROR_VALUE;
+
+    // Luminosity
+    payload.lux = lux;
+
+    // Weight: net weight after tare (g*100)
+    payload.weight = read_hx711();
+
+    digitalWrite(VREG_3V3_PIN, LOW);
+    logInfo("Voltage regulator 3.3V OFF", "SLEEP");
+
+    pinMode(VREG_5V_PIN, OUTPUT);
+    digitalWrite(VREG_5V_PIN, HIGH);
+    logInfo("Voltage regulator 5V ON", "SLEEP");
+
+    deadline = millis() + AI_READ_TIME;
+    while (millis() < deadline) {
+        payload.audio = read_audio();
+        payload.camera = read_camera();
     }
+
+    digitalWrite(VREG_5V_PIN, LOW);
+    logInfo("Voltage regulator 5V OFF", "SLEEP");
+
+    // Battery voltage via ADC (GPIO35)
+    payload.battery_v = read_battery_v();
+
+    lora_send(payload);
+
+    // Listen long enough to cover RX1/RX2 windows even with scheduling jitter.
+    const unsigned long DOWNLINK_LISTEN_MS = 10000;
+    logInfo("Listening for downlink window...", "SYSTEM");
+    deadline = millis() + DOWNLINK_LISTEN_MS;
+    while (millis() < deadline) {
+        lora_tick();
+        delay(50);
+    }
+    logInfo("Downlink window closed", "SYSTEM");
+    shutdown_and_sleep(lora_sleep_duration_s());
+}
+
+void loop() {
+
 }
